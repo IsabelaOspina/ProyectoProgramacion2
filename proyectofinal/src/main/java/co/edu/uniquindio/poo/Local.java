@@ -21,7 +21,7 @@ public class Local extends Propiedad implements IPropiedad, PropiedadBase{
 
     @Override
     public String getDescripcion(){
-        return "local "+ getDescripcionPropiedad();
+        return "local basico ";
 
     }
 

@@ -21,16 +21,10 @@ public class Casa extends Propiedad implements IPropiedad, PropiedadBase{
     }
     
 
-    @Override
-    public String getDescripcionPropiedad() {
-        // TODO Auto-generated method stub
-        return super.getDescripcionPropiedad();
-    }
-
 
     @Override
     public String getDescripcion(){
-        return "casa basica"+ getDescripcionPropiedad();
+        return "casa basica";
     }
 
 

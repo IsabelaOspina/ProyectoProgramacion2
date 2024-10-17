@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import co.edu.uniquindio.poo.Builder.AgenteBuilder;
 import co.edu.uniquindio.poo.Builder.ContadorBuilder;
 import co.edu.uniquindio.poo.Composite.ConjuntoPropiedad;
+import co.edu.uniquindio.poo.Decorator.ConParqueadero;
 import co.edu.uniquindio.poo.Factory.PropiedadFactory;
 import co.edu.uniquindio.poo.Proxy.ContratoArrendamientoProxy;
 
@@ -130,6 +131,10 @@ public class App {
                 ConjuntoPropiedad conjuntoCasa=new ConjuntoPropiedad("conjunto de casas");
                 conjuntoCasa.agregarPropiedadAlConjunto(propiedad1);
                 conjuntoCasa.agregarPropiedadAlConjunto(propiedad2);
+
+                //prueba decoradores
+                //propiedad1=new ConParqueadero(propiedad1);
+                System.out.println(propiedad1.getDescripcion());
 
         }
 
