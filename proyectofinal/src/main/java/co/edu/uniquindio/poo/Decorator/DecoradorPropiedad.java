@@ -1,10 +1,10 @@
 package co.edu.uniquindio.poo.Decorator;
 
 
-public abstract class DecoradorPropiedad implements PropiedadBase {
-    protected PropiedadBase propiedadBase;
+public abstract class DecoradorPropiedad implements Componente {
+    protected Componente propiedadBase;
 
-    public DecoradorPropiedad(PropiedadBase propiedadBase) {
+    public DecoradorPropiedad(Componente propiedadBase) {
         this.propiedadBase = propiedadBase;
     }
 

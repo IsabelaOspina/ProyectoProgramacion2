@@ -4,7 +4,7 @@ package co.edu.uniquindio.poo.Decorator;
 
 public  class ConParqueadero extends DecoradorPropiedad{
 
-    public ConParqueadero(PropiedadBase propiedadBase) {
+    public ConParqueadero(Componente propiedadBase) {
         super(propiedadBase);
     }
     @Override

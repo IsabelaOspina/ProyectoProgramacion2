@@ -1,6 +1,8 @@
 package co.edu.uniquindio.poo;
 
-public class Propiedad {
+import co.edu.uniquindio.poo.Decorator.Componente;
+
+public class Propiedad implements Componente{
     private String localizacion;
     private String descripcion;
     private String idPropiedad;
@@ -20,6 +22,11 @@ public class Propiedad {
         this.propietario = propietario;
         this.estaArrendada= estaArrendada;
         this.comision=comision;
+    }
+
+    @Override
+    public String getDescripcion(){
+        return descripcion;
     }
 
     public String getLocalizacion() {
@@ -93,10 +100,5 @@ public class Propiedad {
                 + ", propietario=" + propietario + ", estaArrendada=" + estaArrendada + ", comision=" + comision + "]";
     }
 
-    
-
-
-
-
-    
+       
 }

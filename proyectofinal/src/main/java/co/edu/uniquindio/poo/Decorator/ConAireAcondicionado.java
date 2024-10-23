@@ -1,7 +1,7 @@
 package co.edu.uniquindio.poo.Decorator;
 
 public class ConAireAcondicionado extends DecoradorPropiedad{
-    public ConAireAcondicionado(PropiedadBase propiedadBase) {
+    public ConAireAcondicionado(Componente propiedadBase) {
         super(propiedadBase);
     }
     @Override

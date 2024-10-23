@@ -2,9 +2,8 @@ package co.edu.uniquindio.poo;
 
 import co.edu.uniquindio.poo.Factory.IPropiedad;
 
-import co.edu.uniquindio.poo.Decorator.PropiedadBase;
 
-public class Local extends Propiedad implements IPropiedad, PropiedadBase{
+public class Local extends Propiedad implements IPropiedad{
     private float espacioBodega;
 
     public Local(String localizacion, String descripcion, String idPropiedad, float valorArriendo, float valorDeposito,
@@ -15,7 +14,6 @@ public class Local extends Propiedad implements IPropiedad, PropiedadBase{
 
     @Override
     public String getIdPropiedad() {
-        // TODO Auto-generated method stub
         return super.getIdPropiedad();
     }
 

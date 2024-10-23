@@ -1,9 +1,8 @@
 package co.edu.uniquindio.poo;
 
-import co.edu.uniquindio.poo.Decorator.PropiedadBase;
 import co.edu.uniquindio.poo.Factory.IPropiedad;
 
-public class Apartamento extends Propiedad implements IPropiedad, PropiedadBase {
+public class Apartamento extends Propiedad implements IPropiedad {
     private float valorAdministracion;
 
     public Apartamento(String localizacion, String descripcion, String idPropiedad, float valorArriendo,
@@ -15,7 +14,6 @@ public class Apartamento extends Propiedad implements IPropiedad, PropiedadBase 
 
     @Override
     public String getIdPropiedad() {
-        // TODO Auto-generated method stub
         return super.getIdPropiedad();
     }
 
