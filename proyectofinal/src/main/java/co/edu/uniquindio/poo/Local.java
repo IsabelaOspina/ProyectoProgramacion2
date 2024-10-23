@@ -1,9 +1,8 @@
 package co.edu.uniquindio.poo;
 
-import co.edu.uniquindio.poo.Factory.IPropiedad;
 
 
-public class Local extends Propiedad implements IPropiedad{
+public class Local extends Propiedad {
     private float espacioBodega;
 
     public Local(String localizacion, String descripcion, String idPropiedad, float valorArriendo, float valorDeposito,

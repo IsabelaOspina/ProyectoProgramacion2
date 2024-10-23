@@ -1,15 +1,19 @@
 package co.edu.uniquindio.poo.Composite;
 import java.util.ArrayList;
+
+import co.edu.uniquindio.poo.AgenteInmobiliario;
 import co.edu.uniquindio.poo.Propiedad;
 import co.edu.uniquindio.poo.Factory.IPropiedad;
 
 public class ConjuntoPropiedad implements IPropiedad{
     private String nombreConjunto;
-    private ArrayList<IPropiedad>  propiedadesConjunto=new ArrayList<>();
+    private ArrayList<IPropiedad>  propiedadesConjunto;
     private Object tipoPropiedad;
 
     public ConjuntoPropiedad(String nombreConjunto) {
         this.nombreConjunto = nombreConjunto;
+        propiedadesConjunto=new ArrayList<>();
+
         
     }
 
@@ -35,6 +39,15 @@ public class ConjuntoPropiedad implements IPropiedad{
             estratoConjunto += propiedad.definirEstrato();
         }
         return estratoConjunto/propiedadesConjunto.size();
+    }
+
+    //metodo para definir la renta total del conjunto
+    public float rentaTotalConjunto(AgenteInmobiliario agente){
+        float rentaTotalConjunto=0;
+        for(IPropiedad propiedad:propiedadesConjunto){
+            rentaTotalConjunto += agente.calcularValorFinalPropiedad((Propiedad)propiedad);
+        }
+        return rentaTotalConjunto;
     }
 
     public String getNombreConjunto() {

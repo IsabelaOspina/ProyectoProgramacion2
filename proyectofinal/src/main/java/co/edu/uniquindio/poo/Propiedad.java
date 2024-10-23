@@ -1,8 +1,9 @@
 package co.edu.uniquindio.poo;
 
 import co.edu.uniquindio.poo.Decorator.Componente;
+import co.edu.uniquindio.poo.Factory.IPropiedad;
 
-public class Propiedad implements Componente{
+public abstract class Propiedad implements Componente, IPropiedad{
     private String localizacion;
     private String descripcion;
     private String idPropiedad;
@@ -28,6 +29,9 @@ public class Propiedad implements Componente{
     public String getDescripcion(){
         return descripcion;
     }
+
+    @Override
+    public abstract int definirEstrato();
 
     public String getLocalizacion() {
         return localizacion;
