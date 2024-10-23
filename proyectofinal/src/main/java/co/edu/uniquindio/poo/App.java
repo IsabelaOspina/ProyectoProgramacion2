@@ -133,7 +133,7 @@ public class App {
                 conjuntoCasa.agregarPropiedadAlConjunto(propiedad2);
 
                 //prueba decoradores
-                //propiedad1=new ConParqueadero(propiedad1);
+                propiedad1=new ConParqueadero(propiedad1);
                 System.out.println(propiedad1.getDescripcion());
 
         }

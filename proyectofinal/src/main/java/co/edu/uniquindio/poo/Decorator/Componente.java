@@ -1,5 +1,5 @@
 package co.edu.uniquindio.poo.Decorator;
 
-public interface PropiedadBase {
+public interface Componente {
     public String getDescripcion();
 }
