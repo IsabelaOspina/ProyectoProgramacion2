@@ -18,27 +18,34 @@ public class ConjuntoPropiedad implements IPropiedad{
     }
 
     //metodo para agregar propiedad al conjunto
-    public void agregarPropiedadAlConjunto(IPropiedad propiedad){
-        if(tipoPropiedad==null){
-            tipoPropiedad=propiedad.getClass();
-            System.out.println("la propiedad "+((Propiedad) propiedad).getIdPropiedad()+" a "+ nombreConjunto);
-        }else{
-            if(tipoPropiedad.getClass()== propiedad.getClass()){
+    public void agregarPropiedadAlConjunto(IPropiedad propiedad) {
+        if (tipoPropiedad == null) {
+            tipoPropiedad = propiedad.getClass();
+            propiedadesConjunto.add(propiedad); // Agregar la propiedad al conjunto
+            System.out.println("La propiedad " + ((Propiedad) propiedad).getIdPropiedad() + " se agregó a " + nombreConjunto);
+        } else {
+            if (tipoPropiedad == propiedad.getClass()) {
                 propiedadesConjunto.add(propiedad);
-                System.out.println("la propiedad "+ ((Propiedad) propiedad).getIdPropiedad()+ " a "+ nombreConjunto);
-            }else{
-                System.out.println("error, solo se admiten propiedades del tipo "+getTipoPropiedad());
+                System.out.println("La propiedad " + ((Propiedad) propiedad).getIdPropiedad() + " se agregó a " + nombreConjunto);
+            } else {
+                System.out.println("Error, solo se admiten propiedades del tipo " + ((ConjuntoPropiedad) tipoPropiedad).getTipoPropiedad());
             }
         }
     }
 
+
     @Override
     public int definirEstrato(){
-        int estratoConjunto=0;
-        for (IPropiedad propiedad:propiedadesConjunto){
-            estratoConjunto += propiedad.definirEstrato();
+        int estratoConjunto = 0;
+        if (propiedadesConjunto.size() > 0) {
+            for (IPropiedad propiedad : propiedadesConjunto) {
+                estratoConjunto += propiedad.definirEstrato();
+            }
+            return estratoConjunto / propiedadesConjunto.size();
+        } else {
+            return 0;
         }
-        return estratoConjunto/propiedadesConjunto.size();
+    
     }
 
     //metodo para definir la renta total del conjunto
@@ -73,8 +80,5 @@ public class ConjuntoPropiedad implements IPropiedad{
     public void setTipoPropiedad(Object tipoPropiedad) {
         this.tipoPropiedad = tipoPropiedad;
     }
-
-
-
     
 }

@@ -131,7 +131,7 @@ public class App {
                 //prueba metodo agregar propiedad a un conjunto de propiedades
                 ConjuntoPropiedad conjuntoCasa=new ConjuntoPropiedad("conjunto de casas");
                 conjuntoCasa.agregarPropiedadAlConjunto(propiedad1);
-                conjuntoCasa.agregarPropiedadAlConjunto(propiedad1);
+                //conjuntoCasa.agregarPropiedadAlConjunto(propiedad1);
 
                 //prueba decoradores
                 //propiedad1=new ConParqueadero(propiedad1);
@@ -141,6 +141,10 @@ public class App {
                 float rentaConjunto= conjuntoCasa.rentaTotalConjunto(agente);
                 System.out.println(rentaConjunto);
 
+
+                //prueba metodo definir estrato de un conjunto
+                System.out.println("estrato del conjunto "+ conjuntoCasa.definirEstrato());
+                
                 Componente propiedadDecorada=new ConParqueadero(propiedad1);
                 System.out.println(propiedadDecorada.getDescripcion());
 
