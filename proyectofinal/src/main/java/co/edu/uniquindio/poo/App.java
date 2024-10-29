@@ -14,9 +14,12 @@ import co.edu.uniquindio.poo.Proxy.ContratoArrendamientoProxy;
 public class App {
         public static void main(String[] args) {
 
+
+                ArrayList <Propiedad> propiedadesPropietario=new ArrayList<>();
+
                 // lista propiedades de la inmobiliaria
                 ArrayList<Propiedad> listapropiedades = new ArrayList<Propiedad>();
-
+                
                 // lista de contratos
                 ArrayList<ContratoArrendamientoReal> listaContrato = new ArrayList<ContratoArrendamientoReal>();
 
@@ -29,13 +32,16 @@ public class App {
 
                 // propietario
                 Propietario propietario = new Propietario("isabela", "ospina", "32415273", 21, "12345",
-                                listapropiedades);
+                                propiedadesPropietario);
+                
 
                 // propiedades
                
                 PropiedadFactory factory = new PropiedadFactory();
                 Casa propiedad1=(Casa) factory.crearPropiedad("casa","sur", "grande", "123", 100000, 1234, propietario, true, 10000 );
                 propiedad1.setNumeroPisos(1);
+
+                //propietario.agregarPropiedades(propiedad1);
 
                 PropiedadFactory factory2 = new PropiedadFactory();
                 Apartamento propiedad2= (Apartamento) factory2.crearPropiedad("apartamento","norte", "edificio torre 2", "234", 1500000, 200000, propietario,false,30000);
@@ -147,6 +153,11 @@ public class App {
                 
                 Componente propiedadDecorada=new ConParqueadero(propiedad1);
                 System.out.println(propiedadDecorada.getDescripcion());
+
+                //prueba patron observer
+                //propiedad1.agregarObservadores(agente2);
+                propiedad1.agregarObservadores(propietario);
+                propiedad1.setEstaArrendada(false);
 
                 
         }

@@ -1,7 +1,10 @@
 package co.edu.uniquindio.poo;
 
+import java.util.ArrayList;
+
 import co.edu.uniquindio.poo.Decorator.Componente;
 import co.edu.uniquindio.poo.Factory.IPropiedad;
+import co.edu.uniquindio.poo.Observer.Observador;
 
 public abstract class Propiedad implements Componente, IPropiedad{
     private String localizacion;
@@ -12,6 +15,7 @@ public abstract class Propiedad implements Componente, IPropiedad{
     private Propietario propietario;
     private boolean estaArrendada;
     private float comision;
+    private ArrayList<Observador> observadores = new ArrayList<>();
 
     public Propiedad(String localizacion, String descripcion, String idPropiedad, float valorArriendo,
             float valorDeposito, Propietario propietario, boolean estaArrendada,float comision) {
@@ -24,6 +28,26 @@ public abstract class Propiedad implements Componente, IPropiedad{
         this.estaArrendada= estaArrendada;
         this.comision=comision;
     }
+
+    public void agregarObservadores(Observador observador){
+        observadores.add(observador);
+    }
+
+    public void eliminarObservadores(Observador observador){
+        observadores.remove(observador);
+    }
+
+    public void notificarObservadores(){
+        for(Observador observador: observadores){
+            observador.notificarEstado(this);
+        }
+    }
+
+    public void setEstaArrendada(boolean estaArrendada) {
+        this.estaArrendada = estaArrendada;
+        notificarObservadores();
+    }
+
 
     @Override
     public String getDescripcion(){
@@ -85,9 +109,7 @@ public abstract class Propiedad implements Componente, IPropiedad{
         return estaArrendada;
     }
 
-    public void setEstaArrendada(boolean estaArrendada) {
-        this.estaArrendada = estaArrendada;
-    }
+  
 
     public float getComision() {
         return comision;
