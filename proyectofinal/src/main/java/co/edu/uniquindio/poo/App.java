@@ -41,7 +41,7 @@ public class App {
                 Casa propiedad1=(Casa) factory.crearPropiedad("casa","sur", "grande", "123", 100000, 1234, propietario, true, 10000 );
                 propiedad1.setNumeroPisos(1);
 
-                //propietario.agregarPropiedades(propiedad1);
+                propietario.agregarPropiedades(propiedad1);
 
                 PropiedadFactory factory2 = new PropiedadFactory();
                 Apartamento propiedad2= (Apartamento) factory2.crearPropiedad("apartamento","norte", "edificio torre 2", "234", 1500000, 200000, propietario,false,30000);

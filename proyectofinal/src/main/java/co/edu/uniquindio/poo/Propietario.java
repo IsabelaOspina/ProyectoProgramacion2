@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import co.edu.uniquindio.poo.Observer.Observador;
 
 public class Propietario extends Persona implements Observador{
-    private ArrayList <Propiedad> propiedadesPropietario=new ArrayList<>();
+    private ArrayList <Propiedad> propiedadesPropietario;
 
     public Propietario(String nombrePersona, String apellidopersona, String telefonoPersona, int edad, String idPersona,
             ArrayList<Propiedad> propiedadesPropietario) {
                 super(nombrePersona, apellidopersona, telefonoPersona, edad, idPersona);
-        this.propiedadesPropietario=propiedadesPropietario;
+        this.propiedadesPropietario=new ArrayList<>();
         
     }
 
