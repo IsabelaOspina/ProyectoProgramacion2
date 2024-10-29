@@ -10,9 +10,15 @@ public class Propietario extends Persona implements Observador{
     public Propietario(String nombrePersona, String apellidopersona, String telefonoPersona, int edad, String idPersona,
             ArrayList<Propiedad> propiedadesPropietario) {
                 super(nombrePersona, apellidopersona, telefonoPersona, edad, idPersona);
-        this.propiedadesPropietario=new ArrayList<>();
-        
-    }
+            
+                if (propiedadesPropietario != null) {
+                    this.propiedadesPropietario = propiedadesPropietario;
+                } else {
+                    this.propiedadesPropietario = new ArrayList<>(); // Inicializa con una lista vacía
+                }
+            }
+
+    
 
 
      // metodo del observer para notificar al propietario cuando una propiedad suya sea arrendada o quede disponible 
@@ -24,21 +30,21 @@ public class Propietario extends Persona implements Observador{
             }else{
                 System.out.println("su propiedad "+ propiedad.getIdPropiedad()+ " ahora esta arrendada");
             }
-        }    
+        }else{
+            System.out.println("la propiedad no pertenece al propietario");
+        }   
     }
 
     public ArrayList<Propiedad> getPropiedadesPropietario() {
         return propiedadesPropietario;
     }
 
-
-    @Override
-    public String toString() {
-        return "Propietario [propiedadesPropietario=" + propiedadesPropietario + "]";
-    }
+// preguntar sobre el to string 
 
     public void agregarPropiedades(Propiedad propiedad){
-        propiedadesPropietario.add(propiedad);
+        if (!propiedadesPropietario.contains(propiedad)) {
+            propiedadesPropietario.add(propiedad);
+        }
     }
 
     

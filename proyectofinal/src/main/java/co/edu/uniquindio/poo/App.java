@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import co.edu.uniquindio.poo.Builder.AgenteBuilder;
 import co.edu.uniquindio.poo.Builder.ContadorBuilder;
+import co.edu.uniquindio.poo.Builder.PropietarioBuilder;
 import co.edu.uniquindio.poo.Composite.ConjuntoPropiedad;
 import co.edu.uniquindio.poo.Decorator.Componente;
 import co.edu.uniquindio.poo.Decorator.ConParqueadero;
@@ -15,7 +16,7 @@ public class App {
         public static void main(String[] args) {
 
 
-                ArrayList <Propiedad> propiedadesPropietario=new ArrayList<>();
+                ArrayList <Propiedad> propiedadesPropietario=new ArrayList<Propiedad>();
 
                 // lista propiedades de la inmobiliaria
                 ArrayList<Propiedad> listapropiedades = new ArrayList<Propiedad>();
@@ -31,8 +32,14 @@ public class App {
                 RegistroContable registroContable = RegistroContable.getInstaciaRegistroContable(listaingresos, listaegresos);
 
                 // propietario
-                Propietario propietario = new Propietario("isabela", "ospina", "32415273", 21, "12345",
-                                propiedadesPropietario);
+                Propietario propietario = new PropietarioBuilder()
+                                        .setIdPropietario("122324")
+                                        .setPropiedadesPropietario( propiedadesPropietario)
+                                        .builderPropietario();
+
+
+
+                
                 
 
                 // propiedades
@@ -155,7 +162,7 @@ public class App {
                 System.out.println(propiedadDecorada.getDescripcion());
 
                 //prueba patron observer
-                //propiedad1.agregarObservadores(agente2);
+                propiedad1.agregarObservadores(agente2);
                 propiedad1.agregarObservadores(propietario);
                 propiedad1.setEstaArrendada(false);
 
