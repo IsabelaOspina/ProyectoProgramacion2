@@ -2,8 +2,10 @@ package co.edu.uniquindio.poo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import co.edu.uniquindio.poo.Observer.Observador;
 
-public class AgenteInmobiliario extends Persona{
+
+public class AgenteInmobiliario extends Persona implements Observador{
 
     private float sueldoMinimo;
     private ArrayList<Propiedad> propiedadesArrendadas;
@@ -43,6 +45,16 @@ public class AgenteInmobiliario extends Persona{
             AgenteInmobiliario agenteInmobiliario, LocalDate fechaInicio, LocalDate fechaFin){
         return new ContratoArrendamientoReal(propiedad, cliente, agenteInmobiliario, fechaInicio, fechaFin);
 
+    }
+
+    // metodo del observer para notificar al agente inmobiliario cuando una propiedad sea arrendada o quede disponible 
+    @Override
+    public void notificarEstado(Propiedad propiedad){
+        if(propiedad.isEstaArrendada() == false ){
+            System.out.println("la propiedad " + propiedad.getIdPropiedad()+ " ahora esta disponible");
+        }else{
+            System.out.println("la propiedad "+ propiedad.getIdPropiedad()+ " ahora esta arrendada");
+        }
     }
 
     public float getSueldoMinimo() {
