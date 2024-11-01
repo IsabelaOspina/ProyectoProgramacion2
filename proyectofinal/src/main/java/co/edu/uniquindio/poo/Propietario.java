@@ -38,8 +38,17 @@ public class Propietario extends Persona implements Observador{
     public ArrayList<Propiedad> getPropiedadesPropietario() {
         return propiedadesPropietario;
     }
+    
 
 // preguntar sobre el to string 
+
+    @Override
+    public String toString() {
+        return this.getNombrePersona();
+    }
+
+
+
 
     public void agregarPropiedades(Propiedad propiedad){
         if (!propiedadesPropietario.contains(propiedad)) {

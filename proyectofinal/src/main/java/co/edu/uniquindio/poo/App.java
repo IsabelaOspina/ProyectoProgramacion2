@@ -165,7 +165,7 @@ public class App {
                 propiedad1.agregarObservadores(agente2);
                 propiedad1.agregarObservadores(propietario);
                 propiedad1.setEstaArrendada(false);
-
+                System.out.println(propietario.toString());
                 
         }
 
