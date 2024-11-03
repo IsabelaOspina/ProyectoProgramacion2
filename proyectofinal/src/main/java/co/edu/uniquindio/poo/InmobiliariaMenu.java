@@ -9,6 +9,8 @@ import co.edu.uniquindio.poo.Builder.ContadorBuilder;
 import co.edu.uniquindio.poo.Builder.AgenteBuilder;
 import co.edu.uniquindio.poo.Builder.ClienteBuilder;
 import co.edu.uniquindio.poo.Builder.PropietarioBuilder;
+import co.edu.uniquindio.poo.Composite.ConjuntoPropiedad;
+import co.edu.uniquindio.poo.Factory.IPropiedad;
 import co.edu.uniquindio.poo.Factory.PropiedadFactory;
 
 public class InmobiliariaMenu {
@@ -19,6 +21,7 @@ public class InmobiliariaMenu {
         ArrayList<ContratoArrendamientoReal> listaContrato = new ArrayList<ContratoArrendamientoReal>();
         ArrayList<Float> listaingresos = new ArrayList<>();
         ArrayList<Float> listaegresos = new ArrayList<>();
+        ArrayList<Cliente> listaClientes = new ArrayList<>();
         AgenteInmobiliario agente = new AgenteBuilder()
                 .setNombreAgente("Juan")
                 .setApellidoAgente("Perez")
@@ -27,6 +30,7 @@ public class InmobiliariaMenu {
                 .setIdAgente("123")
                 .setSueldoMinimo(1000000)
                 .setPropiedadesArrendadas(new ArrayList<>())
+                .setCliente(listaClientes)
                 .builderAgente();
 
         Contador contador = new ContadorBuilder()
@@ -36,6 +40,7 @@ public class InmobiliariaMenu {
                 .setEdadContador(67)
                 .setIdContador("123")
                 .setSueldoContador(10000)
+                .setRegistroContable(RegistroContable.getInstanciaRegistroContable(listaingresos, listaegresos))
                 .builderContador();
 
         Scanner scanner = new Scanner(System.in);
@@ -74,13 +79,15 @@ public class InmobiliariaMenu {
 
                     System.out.println("Ingrese el valor de arriendo de la propiedad: ");
                     float valorArriendo = scanner.nextFloat();
+                    scanner.nextLine(); // Consumir nueva línea
 
                     System.out.println("Ingrese el valor del depósito de la propiedad: ");
                     float valorDeposito = scanner.nextFloat();
+                    scanner.nextLine(); // Consumir nueva línea
 
                     System.out.println("Ingrese la comisión de la propiedad: ");
                     float comision = scanner.nextFloat();
-                    scanner.nextLine(); // Consumir el salto de línea
+                    scanner.nextLine(); // Consumir nueva línea
 
                     System.out.println("Ingrese el nombre del propietario de la propiedad: ");
                     String nombrePropietario = scanner.nextLine();
@@ -93,7 +100,7 @@ public class InmobiliariaMenu {
 
                     System.out.println("Ingrese la edad del propietario de la propiedad: ");
                     int edadPropietario = scanner.nextInt();
-                    scanner.nextLine(); // Consumir el salto de línea
+                    scanner.nextLine(); // Consumir nueva línea
 
                     System.out.println("Ingrese el ID del propietario de la propiedad: ");
                     String idPropietario = scanner.nextLine();
@@ -114,6 +121,7 @@ public class InmobiliariaMenu {
                         case "casa": {
                             System.out.println("Ingrese el número de pisos: ");
                             int numeroPisos = scanner.nextInt();
+                            scanner.nextLine(); // Consumir nueva línea
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
                                     idPropiedad, valorArriendo, valorDeposito, propietario, false, comision);
                             ((Casa) nuevaPropiedad).setNumeroPisos(numeroPisos);
@@ -122,15 +130,19 @@ public class InmobiliariaMenu {
                         case "apartamento": {
                             System.out.println("Ingrese el valor de administración: ");
                             float valorAdministracion = scanner.nextFloat();
+                            scanner.nextLine(); // Consumir nueva línea
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
                                     idPropiedad, valorArriendo, valorDeposito, propietario, false, comision);
                             ((Apartamento) nuevaPropiedad).setValorAdministracion(valorAdministracion);
                             break;
                         }
                         case "local": {
-                            // Agregar atributos específicos de Local si los hay
+                            System.out.println("Ingrese el espacio en bodega:");
+                            float espacioBodega = scanner.nextFloat();
+                            scanner.nextLine(); // Consumir nueva línea
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
                                     idPropiedad, valorArriendo, valorDeposito, propietario, false, comision);
+                            ((Local) nuevaPropiedad).setEspacioBodega(espacioBodega);
                             break;
                         }
                         default: {
@@ -144,10 +156,42 @@ public class InmobiliariaMenu {
                         inmobiliaria.AgregarPropiedad(nuevaPropiedad);
                         listapropiedades.add(nuevaPropiedad);
                         System.out.println("Propiedad agregada exitosamente: " + nuevaPropiedad);
+
+                        nuevaPropiedad.definirEstrato();
+                        System.out.println("Estrato de la propiedad: " + nuevaPropiedad.definirEstrato());
+
+                        System.out.println("¿Desea agregar esta propiedad a un conjunto existente? (si/no): ");
+                        String respuesta = scanner.nextLine().toLowerCase();
+                        if (respuesta.equals("si")) {
+                            System.out.println("Ingrese el nombre del conjunto: ");
+                            String nombreConjunto = scanner.nextLine();
+
+                            ConjuntoPropiedad conjunto = null;
+                            for (IPropiedad prop : listapropiedades) {
+                                if (prop instanceof ConjuntoPropiedad && ((ConjuntoPropiedad) prop).getNombreConjunto().equals(nombreConjunto)) {
+                                    conjunto = (ConjuntoPropiedad) prop;
+                                    break;
+                                }
+                            }
+
+                            if (conjunto == null) {
+                                System.out.println("Conjunto no encontrado. ¿Desea crear un nuevo conjunto? (si/no): ");
+                                String crearConjunto = scanner.nextLine().toLowerCase();
+                                if (crearConjunto.equals("si")) {
+                                    conjunto = new ConjuntoPropiedad(nombreConjunto);
+                                    listapropiedades.add(nuevaPropiedad); // Agregar el nuevo conjunto a la lista de propiedades
+                                    System.out.println("Nuevo conjunto creado: " + nombreConjunto);
+                                }
+                            }
+
+                            if (conjunto != null) {
+                                conjunto.agregarPropiedadAlConjunto(nuevaPropiedad);
+                                System.out.println("Propiedad agregada al conjunto: " + nombreConjunto);
+                            }
+                        }
                     }
                     break;
                 }
-
                 // caso 2
                 case 2: {
                     System.out.println("Ingrese el ID de la propiedad a eliminar: ");
@@ -275,94 +319,47 @@ public class InmobiliariaMenu {
 
                 // caso 6
                 case 6: {
-                    int opcion;
-                    do {
-                        System.out.println("\n--- Menú de opciones financieras---");
-                        System.out.println("1. Registrar ingreso");
-                        System.out.println("2. Registrar egreso");
-                        System.out.println("3. Calcular total ingresos");
-                        System.out.println("4. Calcular total egresos");
-                        System.out.println("5. Calcular sueldo final del agente");
-                        System.out.println("6. Generar comprobante de pago");
-                        System.out.println("7. Salir");
-                        System.out.print("Seleccione una opción: ");
-                        opcion = scanner.nextInt();
-            
-                        switch (opcion) {
-                            case 1:
-                                System.out.print("Ingrese el monto del ingreso: ");
-                                float ingreso = scanner.nextFloat();
-                                contador.registrarIngreso(ingreso);
-                                break;
-                            
-                            case 2:
-                                System.out.print("Ingrese el monto del egreso: ");
-                                float egreso = scanner.nextFloat();
-                                contador.registrarEgreso(egreso);
-                                break;
-            
-                            case 3:
-                                System.out.println("Total de ingresos: " + contador.calcularTotalIngresos());
-                                break;
-            
-                            case 4:
-                                System.out.println("Total de egresos: " + contador.calcularTotalEgresos());
-                                break;
-            
-                            case 5:
-                                System.out.println("Sueldo final del agente: " + contador.calcularSueldoFinal(agente));
-                                break;
-            
-                            case 6:
-                                
-                                scanner.nextLine();  // Limpiar el buffer de entrada
-                                System.out.print("Ingrese el número de factura: ");
-                                long numeroFactura = scanner.nextLong();
-                                
-                                System.out.print("Ingrese el valor de pago: ");
-                                float valorPago = scanner.nextFloat();
-                                
-                                scanner.nextLine();  // Limpiar el buffer de entrada
-                                System.out.print("Ingrese la fecha de generación (yyy-MM-dd): ");
-                                DateTimeFormatter fechaGeneradoStr = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                LocalDate fechaGenerado = LocalDate.parse(scanner.nextLine(), fechaGeneradoStr);
-                                
-                                System.out.print("Ingrese la fecha de vencimiento (yyyy-MM-dd): ");
-                                DateTimeFormatter fechaVencimientoStr = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                LocalDate fechaVencimiento = LocalDate.parse(scanner.nextLine(), fechaVencimientoStr);
-                                
-                                System.out.print("Ingrese el estado de la transacción (ENPROCESO / VIGENTE/ VENCIDO): ");
-                                String estadoStr = scanner.nextLine();
-                                EstadoTransaccion estadoTransaccion = EstadoTransaccion.valueOf(estadoStr.toUpperCase());
-                                
-                                System.out.print("Ingrese el ID del cliente: ");
-                                String idCliente = scanner.nextLine();
-                                
+                    float totalIngresos = 0;
+                    for (ContratoArrendamientoReal contrato : listaContrato) {
+                        totalIngresos += contrato.getValorFinal();
+                    }
 
+                    // Calcular sueldos finales de los agentes
+                    float totalSueldosAgentes = 0;
+                    totalSueldosAgentes += contador.calcularSueldoFinal(agente);
 
-            
-                                // Crear y mostrar el comprobante
-                                Factura factura = new Factura(numeroFactura, valorPago, fechaGenerado, fechaVencimiento, estadoTransaccion, cliente);
-                                System.out.println("\n" + factura.generarComprobante());
-                                break;
-            
-                            case 7:
-                                System.out.println("Saliendo del programa...");
-                                break;
-            
-                            default:
-                                System.out.println("Opción no válida. Intente de nuevo.");
+                    for (IPropiedad prop : listapropiedades) {
+                        if (prop instanceof ConjuntoPropiedad) {
+                            ConjuntoPropiedad conjunto = (ConjuntoPropiedad) prop;
+                            totalIngresos += conjunto.rentaTotalConjunto(agente);
                         }
-                    } while (opcion != 8);
-            
-                    scanner.close();
+                        // Calcular otros egresos
+                        float totalEgresos = totalSueldosAgentes;
+                        for (Float egreso : listaegresos) {
+                            totalEgresos += egreso;
+                        }
+
+                        // Calcular finanzas netas
+                        float finanzasNetas = totalIngresos - totalEgresos;
+
+                        // Mostrar resultados
+                        System.out.println("Ingresos totales: " + totalIngresos);
+                        System.out.println("Egresos totales: " + totalEgresos);
+                        System.out.println("Finanzas netas: " + finanzasNetas);
+                        break;
+                    }
                 }
+
+                case 7:
+                    System.out.println("Saliendo del programa...");
+                    break;
+
+                default:
+                    System.out.println("Opción no válida. Intente de nuevo.");
             }
-                
 
-            
-        } while (opcionPrincipal != 8);
-
+        } while (opcionPrincipal != 7);
+        System.out.println("Gracias por usar el sistema de la inmobiliaria");
         scanner.close();
     }
 }

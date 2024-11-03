@@ -15,7 +15,7 @@ public class RegistroContable {
     }
 
     //singleton registro contable
-    public static RegistroContable getInstaciaRegistroContable(ArrayList<Float> ingresos, ArrayList<Float> egresos){
+    public static RegistroContable getInstanciaRegistroContable(ArrayList<Float> ingresos, ArrayList<Float> egresos){
         if(registroContableUnico==null){
             registroContableUnico=new RegistroContable(ingresos, egresos);
         }

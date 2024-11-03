@@ -29,7 +29,7 @@ public class App {
                 ArrayList<Float> listaegresos = new ArrayList<>();
 
                 // registro contable
-                RegistroContable registroContable = RegistroContable.getInstaciaRegistroContable(listaingresos, listaegresos);
+                RegistroContable registroContable = RegistroContable.getInstanciaRegistroContable(listaingresos, listaegresos);
 
                 // propietario
                 Propietario propietario = new PropietarioBuilder()

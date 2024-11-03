@@ -6,7 +6,7 @@ public class ConAireAcondicionado extends DecoradorPropiedad{
     }
     @Override
     public String getDescripcion(){
-        return propiedadBase.getDescripcion() + ", con parqueadero";
+        return propiedadBase.getDescripcion() + ", con aire acondicionado";
     }
     
     
