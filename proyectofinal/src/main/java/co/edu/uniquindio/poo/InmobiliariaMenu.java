@@ -151,6 +151,8 @@ public class InmobiliariaMenu {
                         }
                     }
 
+
+
                     if (nuevaPropiedad != null) {
                         propietario.agregarPropiedades(nuevaPropiedad);
                         inmobiliaria.AgregarPropiedad(nuevaPropiedad);
@@ -158,39 +160,41 @@ public class InmobiliariaMenu {
                         System.out.println("Propiedad agregada exitosamente: " + nuevaPropiedad);
 
                         nuevaPropiedad.definirEstrato();
-                        System.out.println("Estrato de la propiedad: " + nuevaPropiedad.definirEstrato());
 
                         System.out.println("¿Desea agregar esta propiedad a un conjunto existente? (si/no): ");
                         String respuesta = scanner.nextLine().toLowerCase();
                         if (respuesta.equals("si")) {
                             System.out.println("Ingrese el nombre del conjunto: ");
                             String nombreConjunto = scanner.nextLine();
-
+                        
                             ConjuntoPropiedad conjunto = null;
+                            // Buscar el conjunto existente
                             for (IPropiedad prop : listapropiedades) {
                                 if (prop instanceof ConjuntoPropiedad && ((ConjuntoPropiedad) prop).getNombreConjunto().equals(nombreConjunto)) {
                                     conjunto = (ConjuntoPropiedad) prop;
                                     break;
                                 }
                             }
-
+                        
+                            // Si no se encuentra el conjunto, preguntar si desea crearlo
                             if (conjunto == null) {
                                 System.out.println("Conjunto no encontrado. ¿Desea crear un nuevo conjunto? (si/no): ");
                                 String crearConjunto = scanner.nextLine().toLowerCase();
                                 if (crearConjunto.equals("si")) {
+                                    // Crear un nuevo conjunto y agregarlo a la lista de propiedades
                                     conjunto = new ConjuntoPropiedad(nombreConjunto);
-                                    listapropiedades.add(nuevaPropiedad); // Agregar el nuevo conjunto a la lista de propiedades
+                                    listapropiedades.add(nuevaPropiedad);
                                     System.out.println("Nuevo conjunto creado: " + nombreConjunto);
                                 }
                             }
-
+                            
+                            // Si el conjunto existe o fue creado, agregar la propiedad al conjunto
                             if (conjunto != null) {
                                 conjunto.agregarPropiedadAlConjunto(nuevaPropiedad);
                                 System.out.println("Propiedad agregada al conjunto: " + nombreConjunto);
                             }
                         }
-                    }
-                    break;
+                    }break;   
                 }
                 // caso 2
                 case 2: {
