@@ -275,21 +275,92 @@ public class InmobiliariaMenu {
 
                 // caso 6
                 case 6: {
-                    float ingreso = 0;
-                    for (Propiedad propiedad : listapropiedades) {
-                        ingreso += propiedad.getValorArriendo();
+                    int opcion;
+                    do {
+                        System.out.println("\n--- Menú de opciones financieras---");
+                        System.out.println("1. Registrar ingreso");
+                        System.out.println("2. Registrar egreso");
+                        System.out.println("3. Calcular total ingresos");
+                        System.out.println("4. Calcular total egresos");
+                        System.out.println("5. Calcular sueldo final del agente");
+                        System.out.println("6. Generar comprobante de pago");
+                        System.out.println("7. Salir");
+                        System.out.print("Seleccione una opción: ");
+                        opcion = scanner.nextInt();
+            
+                        switch (opcion) {
+                            case 1:
+                                System.out.print("Ingrese el monto del ingreso: ");
+                                float ingreso = scanner.nextFloat();
+                                contador.registrarIngreso(ingreso);
+                                break;
+                            
+                            case 2:
+                                System.out.print("Ingrese el monto del egreso: ");
+                                float egreso = scanner.nextFloat();
+                                contador.registrarEgreso(egreso);
+                                break;
+            
+                            case 3:
+                                System.out.println("Total de ingresos: " + contador.calcularTotalIngresos());
+                                break;
+            
+                            case 4:
+                                System.out.println("Total de egresos: " + contador.calcularTotalEgresos());
+                                break;
+            
+                            case 5:
+                                System.out.println("Sueldo final del agente: " + contador.calcularSueldoFinal(agente));
+                                break;
+            
+                            case 6:
+                                
+                                scanner.nextLine();  // Limpiar el buffer de entrada
+                                System.out.print("Ingrese el número de factura: ");
+                                long numeroFactura = scanner.nextLong();
+                                
+                                System.out.print("Ingrese el valor de pago: ");
+                                float valorPago = scanner.nextFloat();
+                                
+                                scanner.nextLine();  // Limpiar el buffer de entrada
+                                System.out.print("Ingrese la fecha de generación (yyy-MM-dd): ");
+                                DateTimeFormatter fechaGeneradoStr = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                LocalDate fechaGenerado = LocalDate.parse(scanner.nextLine(), fechaGeneradoStr);
+                                
+                                System.out.print("Ingrese la fecha de vencimiento (yyyy-MM-dd): ");
+                                DateTimeFormatter fechaVencimientoStr = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                LocalDate fechaVencimiento = LocalDate.parse(scanner.nextLine(), fechaVencimientoStr);
+                                
+                                System.out.print("Ingrese el estado de la transacción (ENPROCESO / VIGENTE/ VENCIDO): ");
+                                String estadoStr = scanner.nextLine();
+                                EstadoTransaccion estadoTransaccion = EstadoTransaccion.valueOf(estadoStr.toUpperCase());
+                                
+                                System.out.print("Ingrese el ID del cliente: ");
+                                String idCliente = scanner.nextLine();
+                                
 
-                        contador.registrarIngreso(propiedad.getValorArriendo());
-                    }
-                    float ingresosTotales = contador.calcularTotalIngresos();
 
-                    // Mostrar finanzas
-                    System.out.println("Finanzas de la inmobiliaria:");
-                    System.out.println("Ingresos totales: " + ingresosTotales);
-                    break;
+            
+                                // Crear y mostrar el comprobante
+                                Factura factura = new Factura(numeroFactura, valorPago, fechaGenerado, fechaVencimiento, estadoTransaccion, cliente);
+                                System.out.println("\n" + factura.generarComprobante());
+                                break;
+            
+                            case 7:
+                                System.out.println("Saliendo del programa...");
+                                break;
+            
+                            default:
+                                System.out.println("Opción no válida. Intente de nuevo.");
+                        }
+                    } while (opcion != 8);
+            
+                    scanner.close();
                 }
-
             }
+                
+
+            
         } while (opcionPrincipal != 8);
 
         scanner.close();
