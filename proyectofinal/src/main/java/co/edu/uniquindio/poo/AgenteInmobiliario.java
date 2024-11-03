@@ -9,15 +9,15 @@ public class AgenteInmobiliario extends Persona implements Observador{
 
     private float sueldoMinimo;
     private ArrayList<Propiedad> propiedadesArrendadas;
-    private Cliente cliente;
+    private ArrayList<Cliente> clientes;
     
 
     public AgenteInmobiliario(String nombrePersona, String apellidopersona, String telefonoPersona, int edad,
-            String idPersona, float sueldoMinimo, ArrayList<Propiedad> propiedadesArrendadas, Cliente cliente) {
+            String idPersona, float sueldoMinimo, ArrayList<Propiedad> propiedadesArrendadas,ArrayList<Cliente> clientes ) {
         super(nombrePersona, apellidopersona, telefonoPersona, edad, idPersona);
         this.sueldoMinimo = sueldoMinimo;
         this.propiedadesArrendadas = new ArrayList<>();
-        this.cliente = cliente;
+        this.clientes = new ArrayList<>();
     }
 
     public boolean ArrendarPropiedad(Propiedad propiedad, Cliente cliente){
@@ -72,22 +72,23 @@ public class AgenteInmobiliario extends Persona implements Observador{
     public void setPropiedadesArrendadas(ArrayList<Propiedad> propiedadesArrendadas) {
         this.propiedadesArrendadas = propiedadesArrendadas;
     }
+   
 
-    public Cliente getCliente() {
-        return cliente;
+    public ArrayList<Cliente> getClientes() {
+        return clientes;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setClientes(ArrayList<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
     @Override
     public String toString() {
         return "AgenteInmobiliario [sueldoMinimo=" + sueldoMinimo + ", propiedadesArrendadas=" + propiedadesArrendadas
-                + ", cliente=" + cliente + ", getNombrePersona()=" + getNombrePersona() + ", getApellidopersona()="
+                + ", cliente=" + clientes + ", getNombrePersona()=" + getNombrePersona() + ", getApellidopersona()="
                 + getApellidopersona() + ", getTelefonoPersona()=" + getTelefonoPersona() + ", getEdad()=" + getEdad()
                 + ", getSueldoMinimo()=" + getSueldoMinimo() + ", getPropiedadesArrendadas()="
-                + getPropiedadesArrendadas() + ", getCliente()=" + getCliente() + "]";
+                + getPropiedadesArrendadas() + ", getCliente()=" + getClientes() + "]";
     }
 
   

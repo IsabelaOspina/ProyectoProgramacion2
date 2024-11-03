@@ -13,7 +13,7 @@ public class AgenteBuilder {
     private String idAgente;
     private float sueldoMinimo;
     private ArrayList<Propiedad> propiedadesArrendadas;
-    private Cliente cliente;
+    private ArrayList<Cliente> clientes;
 
     public AgenteBuilder setNombreAgente(String nombreAgente) {
         this.nombreAgente = nombreAgente;
@@ -50,15 +50,15 @@ public class AgenteBuilder {
         return this;
     }
 
-    public AgenteBuilder setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public AgenteBuilder setCliente(ArrayList<Cliente> clientes) {
+        this.clientes = clientes;
         return this;
     }
 
     // metodo builder para agente inmobiliario
     public AgenteInmobiliario builderAgente() {
         return new AgenteInmobiliario(this.telefonoAgente, this.nombreAgente, this.idAgente, this.edadAgente,
-                this.apellidoAgente, this.sueldoMinimo, this.propiedadesArrendadas, this.cliente);
+                this.apellidoAgente, this.sueldoMinimo, this.propiedadesArrendadas, this.clientes);
     }
 
 }

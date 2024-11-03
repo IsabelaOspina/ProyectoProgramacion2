@@ -68,7 +68,7 @@ public class App {
 
                 // agente inmobiliario
                 AgenteInmobiliario agente = new AgenteInmobiliario("pablo", "perez", "30459609", 30, "12555", 1000000,
-                                listapropiedades, cliente);
+                                listapropiedades, new ArrayList<>());
 
                 // contador
                 Contador contador = new Contador("juan", "rodriguez", "325475964", 43, "6789076", 2500000,
