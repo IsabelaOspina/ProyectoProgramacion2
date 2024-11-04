@@ -14,6 +14,8 @@ import co.edu.uniquindio.poo.Factory.IPropiedad;
 import co.edu.uniquindio.poo.Factory.PropiedadFactory;
 
 public class InmobiliariaMenu {
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
     public static void main(String[] args) {
 
@@ -48,10 +50,10 @@ public class InmobiliariaMenu {
 
         Inmobiliaria inmobiliaria = Inmobiliaria.getInstanciaInmobiliaria("Inmobiliaria programacion", "123",
                 "contacto@inmobiliaria.com", listapropiedades, listaContrato);
-
+        ConjuntoPropiedad conjunto = null;
         do {
-            System.out.println("\n--- INMOBILIARIA PROGRAMACION ---");
-            System.out.println("1. Agregar propiedad");
+            System.out.println(ANSI_RED + "\n--- INMOBILIARIA PROGRAMACION ---" + ANSI_RESET);
+            System.out.println("1. Agregar Propiedad");
             System.out.println("2. eliminar propiedad");
             System.out.println("3. arrendar propiedad");
             System.out.println("4. obtener contrato por cliente");
@@ -65,6 +67,11 @@ public class InmobiliariaMenu {
 
                 // caso 1
                 case 1: {
+
+                    System.out.println();
+                    System.out.println(ANSI_RED + "******  SECCION DE AGREGAR PROPIEDAD  **********" + ANSI_RESET);
+                    System.out.println();
+
                     System.out.println("Tipo de propiedad (casa/apartamento/local): ");
                     String tipoPropiedad = scanner.nextLine().toLowerCase();
 
@@ -151,13 +158,10 @@ public class InmobiliariaMenu {
                         }
                     }
 
-
-
                     if (nuevaPropiedad != null) {
                         propietario.agregarPropiedades(nuevaPropiedad);
                         inmobiliaria.AgregarPropiedad(nuevaPropiedad);
                         listapropiedades.add(nuevaPropiedad);
-                        System.out.println("Propiedad agregada exitosamente: " + nuevaPropiedad);
 
                         nuevaPropiedad.definirEstrato();
 
@@ -166,38 +170,49 @@ public class InmobiliariaMenu {
                         if (respuesta.equals("si")) {
                             System.out.println("Ingrese el nombre del conjunto: ");
                             String nombreConjunto = scanner.nextLine();
-                        
-                            ConjuntoPropiedad conjunto = null;
-                            // Buscar el conjunto existente
+
+                            // ConjuntoPropiedad conjunto = null;
                             for (IPropiedad prop : listapropiedades) {
-                                if (prop instanceof ConjuntoPropiedad && ((ConjuntoPropiedad) prop).getNombreConjunto().equals(nombreConjunto)) {
+                                if (prop instanceof ConjuntoPropiedad
+                                        && ((ConjuntoPropiedad) prop).getNombreConjunto().equals(nombreConjunto)) {
                                     conjunto = (ConjuntoPropiedad) prop;
                                     break;
                                 }
                             }
-                        
-                            // Si no se encuentra el conjunto, preguntar si desea crearlo
+
                             if (conjunto == null) {
                                 System.out.println("Conjunto no encontrado. ¿Desea crear un nuevo conjunto? (si/no): ");
                                 String crearConjunto = scanner.nextLine().toLowerCase();
                                 if (crearConjunto.equals("si")) {
-                                    // Crear un nuevo conjunto y agregarlo a la lista de propiedades
                                     conjunto = new ConjuntoPropiedad(nombreConjunto);
-                                    listapropiedades.add(nuevaPropiedad);
+                                    listapropiedades.add(nuevaPropiedad); // Agregar el nuevo conjunto a la lista de
+                                                                          // propiedades
                                     System.out.println("Nuevo conjunto creado: " + nombreConjunto);
                                 }
                             }
-                            
-                            // Si el conjunto existe o fue creado, agregar la propiedad al conjunto
+
                             if (conjunto != null) {
                                 conjunto.agregarPropiedadAlConjunto(nuevaPropiedad);
                                 System.out.println("Propiedad agregada al conjunto: " + nombreConjunto);
                             }
+                        } else {
+                            System.out.println("Propiedad no agregada a ningún conjunto.");
                         }
-                    }break;   
+
+                        System.out.println();
+                        System.out.println(
+                                ANSI_RED + "******  FIN DE LA SECCION DE AGREGAR PROPIEDAD ********" + ANSI_RESET);
+                        System.out.println();
+                    }
+                    break;
                 }
                 // caso 2
                 case 2: {
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "****************  SECCION DE ELIMINAR PROPIEDAD  **************************"
+                                    + ANSI_RESET);
+                    System.out.println();
                     System.out.println("Ingrese el ID de la propiedad a eliminar: ");
                     String idPropiedadEliminar = scanner.nextLine();
 
@@ -215,11 +230,21 @@ public class InmobiliariaMenu {
                     } else {
                         System.out.println("Propiedad con ID " + idPropiedadEliminar + " no encontrada.");
                     }
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "******************  FIN DE LA SECCION DE ELIMINAR PROPIEDAD ************************"
+                                    + ANSI_RESET);
+                    System.out.println();
                     break;
                 }
 
                 // caso 3
                 case 3: {
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "****************  SECCION DE ARRENDAR PROPIEDAD  **************************"
+                                    + ANSI_RESET);
+                    System.out.println();
                     System.out.println("Ingrese los datos del cliente: ");
                     System.out.println("Nombre: ");
                     String nombreCliente = scanner.nextLine();
@@ -279,11 +304,22 @@ public class InmobiliariaMenu {
                     if (!propiedadEncontrada) {
                         System.out.println("Propiedad con ID " + idPropiedadArrendar + " no encontrada.");
                     }
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "******************  FIN DE LA SECCION DE ARRENDAR PROPIEDAD ************************"
+                                    + ANSI_RESET);
+                    System.out.println();
                     break;
                 }
 
                 // caso 4
                 case 4: {
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "****************  SECCION DE OBTENER CONTRATO POR CLIENTE  **************************"
+                                    + ANSI_RESET);
+                    System.out.println();
+
                     System.out.println("Ingrese el ID del cliente: ");
                     String idCliente = scanner.nextLine();
                     boolean clienteEncontrado = false;
@@ -298,11 +334,21 @@ public class InmobiliariaMenu {
                     if (!clienteEncontrado) {
                         System.out.println("Cliente con ID " + idCliente + " no encontrado.");
                     }
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "******************  FIN DE LA SECCION DE OBTENER CONTRATO POR CLIENTE ************************"
+                                    + ANSI_RESET);
+                    System.out.println();
                     break;
                 }
 
                 // caso 5
                 case 5: {
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "****************  SECCION DE LIBERAR PROPIEDAD  **************************"
+                                    + ANSI_RESET);
+                    System.out.println();
                     System.out.println("Ingrese el ID de la propiedad a liberar: ");
                     String idPropiedadLiberar = scanner.nextLine();
                     boolean propiedadEncontrada = false;
@@ -317,12 +363,23 @@ public class InmobiliariaMenu {
                     if (!propiedadEncontrada) {
                         System.out.println("Propiedad con ID " + idPropiedadLiberar + " no encontrada.");
                     }
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "******************  FIN DE LA SECCION DE LIBERAR PROPIEDAD ************************"
+                                    + ANSI_RESET);
+                    System.out.println();
                     break;
 
                 }
 
                 // caso 6
                 case 6: {
+                    System.out.println();
+                    System.out.println(
+                            ANSI_RED + "****************  SECCION DE FINANZAS DE LA INMOBILIARIA  **************************"
+                                    + ANSI_RESET);
+                    System.out.println();
+
                     float totalIngresos = 0;
                     for (ContratoArrendamientoReal contrato : listaContrato) {
                         totalIngresos += contrato.getValorFinal();
@@ -334,7 +391,7 @@ public class InmobiliariaMenu {
 
                     for (IPropiedad prop : listapropiedades) {
                         if (prop instanceof ConjuntoPropiedad) {
-                            ConjuntoPropiedad conjunto = (ConjuntoPropiedad) prop;
+                            // ConjuntoPropiedad conjunto = (ConjuntoPropiedad) prop;
                             totalIngresos += conjunto.rentaTotalConjunto(agente);
                         }
                         // Calcular otros egresos
@@ -346,10 +403,17 @@ public class InmobiliariaMenu {
                         // Calcular finanzas netas
                         float finanzasNetas = totalIngresos - totalEgresos;
 
-                        // Mostrar resultados
-                        System.out.println("Ingresos totales: " + totalIngresos);
-                        System.out.println("Egresos totales: " + totalEgresos);
-                        System.out.println("Finanzas netas: " + finanzasNetas);
+                        // Mostrar resultados en formato tabular
+                        System.out.println("\n--- FINANZAS DE LA INMOBILIARIA ---");
+                        System.out.printf("%-20s %-20s %-20s\n", "Ingresos Totales", "Egresos Totales",
+                                "Finanzas Netas");
+                        System.out.printf("%-20.2f %-20.2f %-20.2f\n", totalIngresos, totalEgresos, finanzasNetas);
+
+                        System.out.println();
+                        System.out.println(
+                                ANSI_RED + "******************  FIN DE LA SECCION DE FINANZAS DE LA INMOBILIARIA ************************"
+                                        + ANSI_RESET);
+                        System.out.println();
                         break;
                     }
                 }
@@ -363,7 +427,7 @@ public class InmobiliariaMenu {
             }
 
         } while (opcionPrincipal != 7);
-        System.out.println("Gracias por usar el sistema de la inmobiliaria");
+        System.out.println(ANSI_RED + "Gracias por usar el sistema de la inmobiliaria" + ANSI_RESET);
         scanner.close();
     }
 }
