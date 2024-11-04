@@ -10,6 +10,9 @@ import co.edu.uniquindio.poo.Builder.AgenteBuilder;
 import co.edu.uniquindio.poo.Builder.ClienteBuilder;
 import co.edu.uniquindio.poo.Builder.PropietarioBuilder;
 import co.edu.uniquindio.poo.Composite.ConjuntoPropiedad;
+import co.edu.uniquindio.poo.Decorator.Componente;
+import co.edu.uniquindio.poo.Decorator.ConAireAcondicionado;
+import co.edu.uniquindio.poo.Decorator.ConParqueadero;
 import co.edu.uniquindio.poo.Factory.IPropiedad;
 import co.edu.uniquindio.poo.Factory.PropiedadFactory;
 
@@ -164,6 +167,41 @@ public class InmobiliariaMenu {
                         listapropiedades.add(nuevaPropiedad);
 
                         nuevaPropiedad.definirEstrato();
+
+                        Componente propiedadDecorada = nuevaPropiedad;
+                        System.out.println("¿Desea agregar decoradores a la propiedad? (si/no): ");
+                        String respuestaDecorador = scanner.nextLine().toLowerCase();
+                        if (respuestaDecorador.equals("si")) {
+                            boolean agregarDecoradores = true;
+                            while (agregarDecoradores) {
+                                System.out.println("Seleccione un decorador: ");
+                                System.out.println("1. Con Parqueadero");
+                                System.out.println("2. Con Aire Acondicionado");
+                                System.out.println("3. Terminar");
+                                int opcionDecorador = scanner.nextInt();
+                                scanner.nextLine(); // Consumir nueva línea
+
+                                switch (opcionDecorador) {
+                                    case 1:
+                                        propiedadDecorada = new ConParqueadero(propiedadDecorada);
+                                        System.out.println("Decorador 'Con Parqueadero' agregado.");
+                                        break;
+                                    case 2:
+                                        propiedadDecorada = new ConAireAcondicionado(propiedadDecorada);
+                                        System.out.println("Decorador 'Con Aire Acondicionado' agregado.");
+                                        break;
+                                    case 3:
+                                        agregarDecoradores = false;
+                                        System.out.println("Finalizando la adición de decoradores.");
+                                        break;
+                                    default:
+                                        System.out.println("Opción no válida.");
+                                        break;
+                                }
+                            }
+                        }
+                        System.out
+                                .println("Descripción de la propiedad decorada: " + propiedadDecorada.getDescripcion());
 
                         System.out.println("¿Desea agregar esta propiedad a un conjunto existente? (si/no): ");
                         String respuesta = scanner.nextLine().toLowerCase();
