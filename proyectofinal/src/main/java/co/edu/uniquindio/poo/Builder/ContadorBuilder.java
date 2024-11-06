@@ -49,8 +49,9 @@ public class ContadorBuilder {
 
     //metodo builder para contador
     public Contador builderContador() {
-        return new Contador(this.telefonoContador, this.nombreContador, this.idContador, this.edadContador,
-                this.apellidoContador, this.sueldoContador, this.registroContable);
+        return new Contador(this.nombreContador, this.apellidoContador, this.telefonoContador, this.edadContador,
+                this.idContador, this.sueldoContador, this.registroContable);
+
     }
 
 }

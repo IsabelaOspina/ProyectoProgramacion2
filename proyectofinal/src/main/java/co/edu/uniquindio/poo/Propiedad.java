@@ -69,6 +69,14 @@ public abstract class Propiedad implements Componente, IPropiedad{
         return descripcion;
     }
 
+    public ArrayList<Observador> getObservadores() {
+        return observadores;
+    }
+
+    public void setObservadores(ArrayList<Observador> observadores) {
+        this.observadores = observadores;
+    }
+
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }

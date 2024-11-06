@@ -45,8 +45,10 @@ public class PropietarioBuilder {
 
     // metodo builder para propietario
     public Propietario builderPropietario() {
-        return new Propietario(this.idPropietario, this.nombrePropietario, this.telefonoPropietario,
-                this.edadPropietario, this.apellidoPropietario, this.propiedadesPropietario);
+        return new Propietario(this.nombrePropietario, this.apellidoPropietario, this.telefonoPropietario,
+                this.edadPropietario,
+                this.idPropietario, this.propiedadesPropietario);
+
     }
 
 }
