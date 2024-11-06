@@ -57,8 +57,10 @@ public class AgenteBuilder {
 
     // metodo builder para agente inmobiliario
     public AgenteInmobiliario builderAgente() {
-        return new AgenteInmobiliario(this.telefonoAgente, this.nombreAgente, this.idAgente, this.edadAgente,
-                this.apellidoAgente, this.sueldoMinimo, this.propiedadesArrendadas, this.clientes);
+        return new AgenteInmobiliario(this.nombreAgente, this.apellidoAgente, this.telefonoAgente, this.edadAgente,
+                this.idAgente,
+                this.sueldoMinimo, this.propiedadesArrendadas, this.clientes);
+
     }
 
 }
