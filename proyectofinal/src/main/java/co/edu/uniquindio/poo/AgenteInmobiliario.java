@@ -43,7 +43,12 @@ public class AgenteInmobiliario extends Persona implements Observador{
     // metodo para generar contrato
     public ContratoArrendamientoReal generContratoArrendamiento(Propiedad propiedad, Cliente cliente,
             AgenteInmobiliario agenteInmobiliario, LocalDate fechaInicio, LocalDate fechaFin){
-        return new ContratoArrendamientoReal(propiedad, cliente, agenteInmobiliario, fechaInicio, fechaFin);
+        if(fechaInicio.isAfter(fechaFin)){
+            throw new IllegalArgumentException("La fecha de inicio debe ser posterior a la fecha de fin del contrato.");
+        }else{
+            return new ContratoArrendamientoReal(propiedad, cliente, agenteInmobiliario, fechaInicio, fechaFin);
+            
+        }
 
     }
 

@@ -40,31 +40,7 @@ public class ConjuntoPropiedadTest {
     
     }
     
-    /* preguntar como lanzar la excepcion
-    @Test
-    public void agregarPropiedadDiferenteAlConjuntoTest(){
-        LOG.info("iniciando prueba ");
-        ConjuntoPropiedad conjuntoPropiedad = new ConjuntoPropiedad("conjunto cristal");
-        Propietario propietario = new Propietario("jaime", "perez", "1234567890", 30, "12354", new ArrayList<>());
-        IPropiedad propiedad = new Casa("centro", "casa basica", "12345", 1500000, 80000, propietario, false, 40000);
-        IPropiedad propiedad2 = new Apartamento("sur", "apartamento basico", "12345", 1500000, 250000, propietario, true, 60000);
 
-        conjuntoPropiedad.agregarPropiedadAlConjunto(propiedad);
-        
-        try{
-            conjuntoPropiedad.agregarPropiedadAlConjunto(propiedad2);
-            fail("se debe lanzar una exepcion");
-        }catch(IllegalArgumentException exception){
-            System.out.println("no es posible integras dos tipos de propiedades en un conjunto");
-        }
-        
-
-
-        assertEquals(1, conjuntoPropiedad.getPropiedadesConjunto().size());
-        assertFalse(conjuntoPropiedad.getPropiedadesConjunto().contains(propiedad2));
-        LOG.info("finalizando prueba");
-
-    }*/
 
     //prueba para calculas el estrato de un conjunto
     @Test

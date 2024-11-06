@@ -31,8 +31,6 @@ public class ContratoProxyTest {
         LOG.info("finalizando prueba");
     }
 
-    /* como lanzar la excepcion
-    public void pruebaSinPerm(){}*/
         
 
 }

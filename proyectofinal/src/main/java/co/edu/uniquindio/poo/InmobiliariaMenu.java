@@ -2,6 +2,7 @@ package co.edu.uniquindio.poo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -49,7 +50,7 @@ public class InmobiliariaMenu {
                 .builderContador();
 
         Scanner scanner = new Scanner(System.in);
-        int opcionPrincipal;
+        int opcionPrincipal = 0;
 
         Inmobiliaria inmobiliaria = Inmobiliaria.getInstanciaInmobiliaria("Inmobiliaria programacion", "123",
                 "contacto@inmobiliaria.com", listapropiedades, listaContrato);
@@ -57,15 +58,30 @@ public class InmobiliariaMenu {
         do {
             System.out.println(ANSI_RED + "\n--- INMOBILIARIA PROGRAMACION ---" + ANSI_RESET);
             System.out.println("1. Agregar Propiedad");
-            System.out.println("2. eliminar propiedad");
-            System.out.println("3. arrendar propiedad");
-            System.out.println("4. obtener contrato por cliente");
-            System.out.println("5. liberar propiedad");
-            System.out.println("6. obtener finanzas de la inmobiliaria");
+            System.out.println("2. Eliminar Propiedad");
+            System.out.println("3. Arrendar Propiedad");
+            System.out.println("4. Obtener contrato por cliente");
+            System.out.println("5. Liberar propiedad");
+            System.out.println("6. Obtener finanzas de la inmobiliaria");
             System.out.println("7. Salir");
             System.out.print("Seleccione una opción: ");
+
+            // Verificar que la entrada sea un número
+            if (!scanner.hasNextInt()) {
+                System.out.println("Opción no válida. Por favor, ingrese un número entre 1 y 7.");
+                scanner.next(); // Consumir la entrada no válida
+                continue;
+            }
+
             opcionPrincipal = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consumir el salto de línea
+
+            // Verificar si el número está en el rango de 1 a 7
+            if (opcionPrincipal < 1 || opcionPrincipal > 7) {
+                System.out.println("Opción no válida. Por favor, ingrese un número entre 1 y 7.");
+                continue;
+            }
+
             switch (opcionPrincipal) {
 
                 // caso 1
@@ -76,7 +92,17 @@ public class InmobiliariaMenu {
                     System.out.println();
 
                     System.out.println("Tipo de propiedad (casa/apartamento/local): ");
-                    String tipoPropiedad = scanner.nextLine().toLowerCase();
+                    String tipoPropiedad;
+                    while (true) {
+                        tipoPropiedad = scanner.nextLine().toLowerCase();
+                        if (tipoPropiedad.equals("casa") || tipoPropiedad.equals("apartamento")
+                                || tipoPropiedad.equals("local")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "Tipo de propiedad no válido. Por favor, ingrese 'casa', 'apartamento' o 'local'.");
+                        }
+                    }
 
                     System.out.println("Ingrese la localización de la propiedad: ");
                     String localizacion = scanner.nextLine();
@@ -88,17 +114,58 @@ public class InmobiliariaMenu {
                     String idPropiedad = scanner.nextLine();
 
                     System.out.println("Ingrese el valor de arriendo de la propiedad: ");
-                    float valorArriendo = scanner.nextFloat();
-                    scanner.nextLine(); // Consumir nueva línea
+                    float valorArriendo = 0;
+                    while (true) {
 
+                        if (scanner.hasNextFloat()) {
+                            valorArriendo = scanner.nextFloat();
+                            scanner.nextLine(); // Consumir nueva línea
+                            if (valorArriendo >= 0) {
+                                break;
+                            } else {
+                                System.out.println(
+                                        "El valor no puede ser negativo. Por favor, ingrese un número positivo.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                            scanner.next(); // Consumir la entrada no válida
+                        }
+                    }
                     System.out.println("Ingrese el valor del depósito de la propiedad: ");
-                    float valorDeposito = scanner.nextFloat();
-                    scanner.nextLine(); // Consumir nueva línea
+                    float valorDeposito = 0;
+                    while (true) {
+                        if (scanner.hasNextFloat()) {
+                            valorDeposito = scanner.nextFloat();
+                            scanner.nextLine(); // Consumir nueva línea
+                            if (valorDeposito >= 0) {
+                                break;
+                            } else {
+                                System.out.println(
+                                        "El valor no puede ser negativo. Por favor, ingrese un número positivo.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                            scanner.next(); // Consumir la entrada no válida
+                        }
+                    }
 
                     System.out.println("Ingrese la comisión de la propiedad: ");
-                    float comision = scanner.nextFloat();
-                    scanner.nextLine(); // Consumir nueva línea
-
+                    float comision = 0;
+                    while (true) {
+                        if (scanner.hasNextFloat()) {
+                            comision = scanner.nextFloat();
+                            scanner.nextLine(); // Consumir nueva línea
+                            if (comision >= 0) {
+                                break;
+                            } else {
+                                System.out.println(
+                                        "El valor no puede ser negativo. Por favor, ingrese un número positivo.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                            scanner.next(); // Consumir la entrada no válida
+                        }
+                    }
                     System.out.println("Ingrese el nombre del propietario de la propiedad: ");
                     String nombrePropietario = scanner.nextLine();
 
@@ -109,9 +176,22 @@ public class InmobiliariaMenu {
                     String telefonoPropietario = scanner.nextLine();
 
                     System.out.println("Ingrese la edad del propietario de la propiedad: ");
-                    int edadPropietario = scanner.nextInt();
-                    scanner.nextLine(); // Consumir nueva línea
-
+                    int edadPropietario = 0;
+                    while (true) {
+                        if (scanner.hasNextInt()) {
+                            edadPropietario = scanner.nextInt();
+                            scanner.nextLine(); // Consumir nueva línea
+                            if (edadPropietario >= 0) {
+                                break;
+                            } else {
+                                System.out.println(
+                                        "La edad no puede ser negativa. Por favor, ingrese un número positivo.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
+                            scanner.next(); // Consumir la entrada no válida
+                        }
+                    }
                     System.out.println("Ingrese el ID del propietario de la propiedad: ");
                     String idPropietario = scanner.nextLine();
 
@@ -129,17 +209,47 @@ public class InmobiliariaMenu {
 
                     switch (tipoPropiedad) {
                         case "casa": {
-                            System.out.println("Ingrese el número de pisos: ");
-                            int numeroPisos = scanner.nextInt();
-                            scanner.nextLine(); // Consumir nueva línea
+                            int numeroPisos = 0;
+                            while (true) {
+                                System.out.println("Ingrese el número de pisos: ");
+                                if (scanner.hasNextInt()) {
+                                    numeroPisos = scanner.nextInt();
+                                    scanner.nextLine(); // Consumir nueva línea
+                                    if (numeroPisos >= 0) {
+                                        break;
+                                    } else {
+                                        System.out.println(
+                                                "El número de pisos no puede ser negativo. Por favor, ingrese un número positivo.");
+                                    }
+                                } else {
+                                    System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
+                                    scanner.next(); // Consumir la entrada no válida
+                                }
+                            }
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
                                     idPropiedad, valorArriendo, valorDeposito, propietario, false, comision);
                             ((Casa) nuevaPropiedad).setNumeroPisos(numeroPisos);
                             break;
                         }
                         case "apartamento": {
-                            System.out.println("Ingrese el valor de administración: ");
-                            float valorAdministracion = scanner.nextFloat();
+                            
+                            float valorAdministracion = 0;
+                            while (true) {
+                                System.out.println("Ingrese el valor de administración: ");
+                                if (scanner.hasNextFloat()) {
+                                    valorAdministracion = scanner.nextFloat();
+
+                                    if (valorAdministracion >= 0) {
+                                        break;
+                                    } else {
+                                        System.out.println(
+                                                "El valor no puede ser negativo. Por favor, ingrese un número positivo.");
+                                    }
+                                } else {
+                                    System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                                    scanner.next(); // Consumir la entrada no válida
+                                }
+                            }
                             scanner.nextLine(); // Consumir nueva línea
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
                                     idPropiedad, valorArriendo, valorDeposito, propietario, false, comision);
@@ -148,15 +258,26 @@ public class InmobiliariaMenu {
                         }
                         case "local": {
                             System.out.println("Ingrese el espacio en bodega:");
-                            float espacioBodega = scanner.nextFloat();
-                            scanner.nextLine(); // Consumir nueva línea
+                            float espacioBodega = 0;
+                            while (true) {
+                                System.out.println("Ingrese el espacio en bodega: ");
+                                if (scanner.hasNextFloat()) {
+                                    espacioBodega = scanner.nextFloat();
+                                    scanner.nextLine(); // Consumir nueva línea
+                                    if (espacioBodega >= 0) {
+                                        break;
+                                    } else {
+                                        System.out.println(
+                                                "El valor no puede ser negativo. Por favor, ingrese un número positivo.");
+                                    }
+                                } else {
+                                    System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                                    scanner.next(); // Consumir la entrada no válida
+                                }
+                            }
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
                                     idPropiedad, valorArriendo, valorDeposito, propietario, false, comision);
                             ((Local) nuevaPropiedad).setEspacioBodega(espacioBodega);
-                            break;
-                        }
-                        default: {
-                            System.out.println("Tipo de propiedad no válido.");
                             break;
                         }
                     }
@@ -170,7 +291,15 @@ public class InmobiliariaMenu {
 
                         Componente propiedadDecorada = nuevaPropiedad;
                         System.out.println("¿Desea agregar caracteristicas adicionales a la propiedad? (si/no): ");
-                        String respuestaDecorador = scanner.nextLine().toLowerCase();
+                        String respuestaDecorador;
+                        while (true) {
+                            respuestaDecorador = scanner.nextLine().toLowerCase();
+                            if (respuestaDecorador.equals("si") || respuestaDecorador.equals("no")) {
+                                break;
+                            } else {
+                                System.out.println("Respuesta no válida. Por favor, ingrese 'si' o 'no'.");
+                            }
+                        }
                         if (respuestaDecorador.equals("si")) {
                             boolean agregarDecoradores = true;
                             while (agregarDecoradores) {
@@ -178,38 +307,57 @@ public class InmobiliariaMenu {
                                 System.out.println("1. Con Parqueadero");
                                 System.out.println("2. Con Aire Acondicionado");
                                 System.out.println("3. Terminar");
-                                int opcionDecorador = scanner.nextInt();
-                                scanner.nextLine(); // Consumir nueva línea
+                                int opcionDecorador = 0;
+                                while (true) {
+                                    if (scanner.hasNextInt()) {
+                                        opcionDecorador = scanner.nextInt();
+                                        scanner.nextLine(); // Consumir nueva línea
+                                        if (opcionDecorador >= 1 && opcionDecorador <= 3) {
+                                            break;
+                                        } else {
+                                            System.out.println(
+                                                    "Opción no válida. Por favor, ingrese un número entre 1 y 3.");
+                                        }
+                                    } else {
+                                        System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
+                                        scanner.next(); // Consumir la entrada no válida
+                                    }
+                                }
 
                                 switch (opcionDecorador) {
                                     case 1:
                                         propiedadDecorada = new ConParqueadero(propiedadDecorada);
-                                        System.out.println("Decorador 'Con Parqueadero' agregado.");
+                                        System.out.println("Propiedad 'Con Parqueadero' agregado.");
                                         break;
                                     case 2:
                                         propiedadDecorada = new ConAireAcondicionado(propiedadDecorada);
-                                        System.out.println("Decorador 'Con Aire Acondicionado' agregado.");
+                                        System.out.println("Propiedadr 'Con Aire Acondicionado' agregado.");
                                         break;
                                     case 3:
                                         agregarDecoradores = false;
-                                        System.out.println("Finalizando la adición de decoradores.");
+                                        System.out.println("Finalizando la adición de caracteristicas.");
                                         break;
-                                    default:
-                                        System.out.println("Opción no válida.");
-                                        break;
+
                                 }
                             }
                         }
                         System.out
-                                .println("Descripción de la propiedad decorada: " + propiedadDecorada.getDescripcion());
+                                .println("Descripción de la propiedad: " + propiedadDecorada.getDescripcion());
 
                         System.out.println("¿Desea agregar esta propiedad a un conjunto existente? (si/no): ");
-                        String respuesta = scanner.nextLine().toLowerCase();
+                        String respuesta;
+                        while (true) {
+                            respuesta = scanner.nextLine().toLowerCase();
+                            if (respuesta.equals("si") || respuesta.equals("no")) {
+                                break;
+                            } else {
+                                System.out.println("Respuesta no válida. Por favor, ingrese 'si' o 'no'.");
+                            }
+                        }
                         if (respuesta.equals("si")) {
                             System.out.println("Ingrese el nombre del conjunto: ");
                             String nombreConjunto = scanner.nextLine();
 
-                            // ConjuntoPropiedad conjunto = null;
                             for (IPropiedad prop : listapropiedades) {
                                 if (prop instanceof ConjuntoPropiedad
                                         && ((ConjuntoPropiedad) prop).getNombreConjunto().equals(nombreConjunto)) {
@@ -220,12 +368,19 @@ public class InmobiliariaMenu {
 
                             if (conjunto == null) {
                                 System.out.println("Conjunto no encontrado. ¿Desea crear un nuevo conjunto? (si/no): ");
-                                String crearConjunto = scanner.nextLine().toLowerCase();
+                                String crearConjunto;
+                                while (true) {
+                                    crearConjunto = scanner.nextLine().toLowerCase();
+                                    if (crearConjunto.equals("si") || crearConjunto.equals("no")) {
+                                        break;
+                                    } else {
+                                        System.out.println("Respuesta no válida. Por favor, ingrese 'si' o 'no'.");
+                                    }
+                                }
                                 if (crearConjunto.equals("si")) {
                                     conjunto = new ConjuntoPropiedad(nombreConjunto);
-                                    listapropiedades.add(nuevaPropiedad); // Agregar el nuevo conjunto a la lista de
-                                                                          // propiedades
-                                    System.out.println("Nuevo conjunto creado: " + nombreConjunto);
+                                    listapropiedades.add(nuevaPropiedad);
+
                                 }
                             }
 
@@ -291,13 +446,42 @@ public class InmobiliariaMenu {
                     System.out.println("Teléfono: ");
                     String telefonoCliente = scanner.nextLine();
                     System.out.println("Edad: ");
-                    int edadCliente = scanner.nextInt();
-                    scanner.nextLine(); // Consumir el salto de línea
+                    int edadCliente = 0;
+                    while (true) {
+                        if (scanner.hasNextInt()) {
+                            edadCliente = scanner.nextInt();
+                            scanner.nextLine(); // Consumir nueva línea
+                            if (edadCliente >= 0) {
+                                break;
+                            } else {
+                                System.out.println(
+                                        "La edad no puede ser negativa. Por favor, ingrese un número positivo.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
+                            // Consumir la entrada no válida
+                            scanner.nextLine(); // Consumir el salto de línea restante
+                        }
+                    }
                     System.out.println("ID: ");
                     String idCliente = scanner.nextLine();
                     System.out.println("Presupuesto: ");
-                    float presupuestoCliente = scanner.nextFloat();
-                    scanner.nextLine(); // Consumir el salto de línea
+                    float presupuestoCliente = 0;
+                    while (true) {
+                        if (scanner.hasNextFloat()) {
+                            presupuestoCliente = scanner.nextFloat();
+                            scanner.nextLine(); // Consumir nueva línea
+                            if (presupuestoCliente >= 0) {
+                                break;
+                            } else {
+                                System.out.println(
+                                        "El presupuesto no puede ser negativo. Por favor, ingrese un número positivo.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                            scanner.next(); // Consumir la entrada no válida
+                        }
+                    } // Consumir el salto de línea
 
                     Cliente cliente = new ClienteBuilder()
                             .setNombreCliente(nombreCliente)
@@ -320,16 +504,35 @@ public class InmobiliariaMenu {
 
                                 if (arrendada) {
                                     System.out.println("Propiedad arrendada exitosamente, generando contrato...");
-                                    System.out.print("Ingrese la fecha de inicio del contrato (YYYY-MM-DD): ");
-                                    DateTimeFormatter formatterInicio = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                    LocalDate Inicio = LocalDate.parse(scanner.nextLine(), formatterInicio);
 
-                                    System.out.print("Ingrese la fecha de fin del contrato (YYYY-MM-DD): ");
-                                    DateTimeFormatter formatterFin = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                    LocalDate Fin = LocalDate.parse(scanner.nextLine(), formatterFin);
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+                                    LocalDate inicio = null;
+                                    while (true) {
+                                        try {
+                                            System.out.print("Ingrese la fecha de inicio del contrato (YYYY-MM-DD): ");
+                                            inicio = LocalDate.parse(scanner.nextLine(), formatter);
+                                            break;
+                                        } catch (DateTimeParseException e) {
+                                            System.out.println(
+                                                    "Fecha no válida. Por favor, ingrese la fecha en el formato YYYY-MM-DD.");
+                                        }
+                                    }
+
+                                    LocalDate fin = null;
+                                    while (true) {
+                                        try {
+                                            System.out.print("Ingrese la fecha de fin del contrato (YYYY-MM-DD): ");
+                                            fin = LocalDate.parse(scanner.nextLine(), formatter);
+                                            break;
+                                        } catch (DateTimeParseException e) {
+                                            System.out.println(
+                                                    "Fecha no válida. Por favor, ingrese la fecha en el formato YYYY-MM-DD.");
+                                        }
+                                    }
 
                                     ContratoArrendamientoReal contrato = agente.generContratoArrendamiento(propiedad,
-                                            cliente, agente, Inicio, Fin);
+                                            cliente, agente, inicio, fin);
                                     contrato.obtenerInformacionContrato();
                                     listaContrato.add(contrato);
                                     System.out.println("Contrato generado exitosamente.");
@@ -345,7 +548,7 @@ public class InmobiliariaMenu {
                     }
 
                     if (!propiedadEncontrada) {
-                        System.out.println("Propiedad con ID " + idPropiedadArrendar + " no encontrada.");
+                        System.out.println("Propiedad no encontrada. Por favor, ingrese un ID válido.");
                     }
                     System.out.println();
                     System.out.println(
