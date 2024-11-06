@@ -22,11 +22,11 @@ public class PersonaTest {
 
         Persona persona = new Persona(nombre, apellido, telefono, edad, id);
 
-        assertEquals(nombre, persona.getNombrePersona(), "El nombre no coincide");
-        assertEquals(apellido, persona.getApellidopersona(), "El apellido no coincide");
-        assertEquals(telefono, persona.getTelefonoPersona(), "El teléfono no coincide");
-        assertEquals(edad, persona.getEdad(), "La edad no coincide");
-        assertEquals(id, persona.getIdPersona(), "El ID no coincide");
+        assertEquals(nombre, persona.getNombrePersona());
+        assertEquals(apellido, persona.getApellidopersona());
+        assertEquals(telefono, persona.getTelefonoPersona());
+        assertEquals(edad, persona.getEdad());
+        assertEquals(id, persona.getIdPersona());
 
         LOG.info("finalizando prueba");
     }

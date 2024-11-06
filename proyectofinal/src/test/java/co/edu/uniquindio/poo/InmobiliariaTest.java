@@ -51,7 +51,7 @@ public class InmobiliariaTest {
     
 
     @Test
-    public void TestAgregarPropiedad(){
+    public void TestAgregarPropiedadAlContrato(){
 
         LOG.info("iniciando prueba");
         
