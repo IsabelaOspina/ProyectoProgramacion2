@@ -169,12 +169,12 @@ public class InmobiliariaMenu {
                         nuevaPropiedad.definirEstrato();
 
                         Componente propiedadDecorada = nuevaPropiedad;
-                        System.out.println("¿Desea agregar decoradores a la propiedad? (si/no): ");
+                        System.out.println("¿Desea agregar caracteristicas adicionales a la propiedad? (si/no): ");
                         String respuestaDecorador = scanner.nextLine().toLowerCase();
                         if (respuestaDecorador.equals("si")) {
                             boolean agregarDecoradores = true;
                             while (agregarDecoradores) {
-                                System.out.println("Seleccione un decorador: ");
+                                System.out.println("Seleccione una caracteristica adicional: ");
                                 System.out.println("1. Con Parqueadero");
                                 System.out.println("2. Con Aire Acondicionado");
                                 System.out.println("3. Terminar");
@@ -315,25 +315,30 @@ public class InmobiliariaMenu {
                     for (Propiedad propiedad : listapropiedades) {
                         if (propiedad.getIdPropiedad().equals(idPropiedadArrendar)) {
                             propiedadEncontrada = true;
-                            boolean arrendada = agente.ArrendarPropiedad(propiedad, cliente);
+                            if (presupuestoCliente >= propiedad.getValorArriendo()) {
+                                boolean arrendada = agente.ArrendarPropiedad(propiedad, cliente);
 
-                            if (arrendada) {
-                                System.out.println("Propiedad arrendada exitosamente, generando contrato...");
-                                System.out.print("Ingrese la fecha de inicio del contrato (YYYY-MM-DD): ");
-                                DateTimeFormatter formatterInicio = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                LocalDate Inicio = LocalDate.parse(scanner.nextLine(), formatterInicio);
+                                if (arrendada) {
+                                    System.out.println("Propiedad arrendada exitosamente, generando contrato...");
+                                    System.out.print("Ingrese la fecha de inicio del contrato (YYYY-MM-DD): ");
+                                    DateTimeFormatter formatterInicio = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                    LocalDate Inicio = LocalDate.parse(scanner.nextLine(), formatterInicio);
 
-                                System.out.print("Ingrese la fecha de fin del contrato (YYYY-MM-DD): ");
-                                DateTimeFormatter formatterFin = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                                LocalDate Fin = LocalDate.parse(scanner.nextLine(), formatterFin);
+                                    System.out.print("Ingrese la fecha de fin del contrato (YYYY-MM-DD): ");
+                                    DateTimeFormatter formatterFin = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                                    LocalDate Fin = LocalDate.parse(scanner.nextLine(), formatterFin);
 
-                                ContratoArrendamientoReal contrato = agente.generContratoArrendamiento(propiedad,
-                                        cliente, agente, Inicio, Fin);
-                                contrato.obtenerInformacionContrato();
-                                listaContrato.add(contrato);
-                                System.out.println("Contrato generado exitosamente.");
+                                    ContratoArrendamientoReal contrato = agente.generContratoArrendamiento(propiedad,
+                                            cliente, agente, Inicio, Fin);
+                                    contrato.obtenerInformacionContrato();
+                                    listaContrato.add(contrato);
+                                    System.out.println("Contrato generado exitosamente.");
+                                } else {
+                                    System.out.println("La propiedad ya está arrendada.");
+                                }
                             } else {
-                                System.out.println("La propiedad ya está arrendada.");
+                                System.out.println(
+                                        "El presupuesto del cliente no es suficiente para arrendar esta propiedad.");
                             }
                             break;
                         }
@@ -354,8 +359,7 @@ public class InmobiliariaMenu {
                 case 4: {
                     System.out.println();
                     System.out.println(
-                            ANSI_RED + "****************  SECCION DE OBTENER CONTRATO POR CLIENTE  **************************"
-                                    + ANSI_RESET);
+                            ANSI_RED + "******  SECCION DE OBTENER CONTRATO POR CLIENTE  **********" + ANSI_RESET);
                     System.out.println();
 
                     System.out.println("Ingrese el ID del cliente: ");
@@ -365,7 +369,19 @@ public class InmobiliariaMenu {
                     for (ContratoArrendamientoReal contrato : listaContrato) {
                         if (contrato.getCliente().getIdPersona().equals(idCliente)) {
                             clienteEncontrado = true;
-                            System.out.println(contrato.obtenerInformacionContrato());
+
+                            // Solicitar ID del agente
+                            System.out.println("Ingrese el ID del agente: ");
+                            String idAgente = scanner.nextLine();
+
+                            System.out.println(contrato.getAgenteInmobiliario().getIdPersona());
+
+                            // Verificar si el ID del agente coincide con el agente asignado
+                            if (contrato.getAgenteInmobiliario().getIdPersona().equals(idAgente)) {
+                                System.out.println(contrato.obtenerInformacionContrato());
+                            } else {
+                                System.out.println("El ID del agente no coincide con el agente asignado.");
+                            }
                         }
                     }
 
@@ -373,9 +389,8 @@ public class InmobiliariaMenu {
                         System.out.println("Cliente con ID " + idCliente + " no encontrado.");
                     }
                     System.out.println();
-                    System.out.println(
-                            ANSI_RED + "******************  FIN DE LA SECCION DE OBTENER CONTRATO POR CLIENTE ************************"
-                                    + ANSI_RESET);
+                    System.out.println(ANSI_RED + "******  FIN DE LA SECCION DE OBTENER CONTRATO POR CLIENTE ********"
+                            + ANSI_RESET);
                     System.out.println();
                     break;
                 }
