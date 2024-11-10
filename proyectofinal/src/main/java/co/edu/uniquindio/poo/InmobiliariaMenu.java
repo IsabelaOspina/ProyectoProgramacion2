@@ -6,7 +6,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.sql.rowset.spi.SyncResolver;
 
 import co.edu.uniquindio.poo.Builder.ContadorBuilder;
 import co.edu.uniquindio.poo.Builder.AgenteBuilder;
@@ -703,6 +702,8 @@ public class InmobiliariaMenu {
                                 }
                             }
 
+                            System.out.println(contrato.getAgenteInmobiliario().getIdPersona());
+
                             // Verificar si el ID del agente coincide con el agente asignado
                             if (contrato.getAgenteInmobiliario().getIdPersona().equals(idAgente)) {
                                 // Mostrar información del contrato en formato de tabla
@@ -731,45 +732,16 @@ public class InmobiliariaMenu {
 
                     System.out.println("Ingrese el ID del cliente: ");
                     String idClienteFactura;
-                    while (true) {
-                        idClienteFactura = scanner.nextLine().trim();
-                        if (!idClienteFactura.isEmpty() && !idClienteFactura.contains(" ")) {
-                            break;
-                        } else {
-                            System.out.println(
-                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
-                        }
-                    }
-                    Cliente clienteFactura = null;
+                   
 
-                    for (Cliente cliente : listaClientes) {
-                        if (cliente.getIdPersona().equals(idClienteFactura)) {
-                            clienteFactura = cliente;
-                            break;
-                        }
-                    }
-                    if (clienteFactura == null) {
-                        System.out.println("Cliente con ID " + idClienteFactura + " no encontrado.");
-                    } else {
-                        System.out.println("Ingrese el número de factura: ");
-                        long numeroFactura = Long.parseLong(scanner.nextLine());
 
-                        System.out.println("Ingrese el valor del pago: ");
-                        float valorPago = Float.parseFloat(scanner.nextLine());
 
-                        LocalDate fechaGenerado = LocalDate.now();
-                        System.out.println("Ingrese la fecha de vencimiento (YYYY-MM-DD): ");
-                        LocalDate fechaVencimiento = LocalDate.parse(scanner.nextLine());
 
-                        System.out.println("Ingrese el estado de la transacción: ");
-                        EstadoTransaccion estadoTransaccion = EstadoTransaccion
-                                .valueOf(scanner.nextLine().toUpperCase());
 
-                        Factura factura = new Factura(numeroFactura, valorPago, fechaGenerado, fechaVencimiento,
-                                estadoTransaccion, clienteFactura);
-                        listaFacturas.add(factura);
-                        System.out.println(factura.generarComprobante());
-                    }
+
+
+
+
 
                     System.out.println();
                     System.out.println(ANSI_RED + "******  FIN DE LA SECCION DE GENERAR FACTURA ********" + ANSI_RESET);
@@ -830,7 +802,7 @@ public class InmobiliariaMenu {
 
                     // Calcular sueldos finales de los agentes
                     float totalSueldosAgentes = 0;
-                    totalSueldosAgentes += contador.calcularSueldoFinal(agente);
+                    totalSueldosAgentes += contador.calcularSueldoFinal(agente,);
 
                     for (IPropiedad prop : listapropiedades) {
                         if (prop instanceof ConjuntoPropiedad) {

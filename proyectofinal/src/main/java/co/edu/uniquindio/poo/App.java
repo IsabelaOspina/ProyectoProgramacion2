@@ -97,7 +97,7 @@ public class App {
                         .builderContador();
 
                 // prueba del metodo calcular sueldo final
-                System.out.println("el sueldo final del agente es de " + contador.calcularSueldoFinal(agente));
+                
 
                 // prueba del metodo calcular valor final de la propiedad
                 System.out.println("el valor final del apartamento es de : "
@@ -124,6 +124,9 @@ public class App {
                 //prueba metodo agregar contarto a la lista
                 inmobiliaria.AgregarContrato(contrato);
                 inmobiliaria.AgregarContrato(contrato2);
+
+                listaContrato.add(contrato2);
+                listaContrato.add(contrato);
 
                 // prueba metodo para obtener contrato por id del cliente
                 System.out.println(inmobiliaria.obtenerContratoPorCliente("290"));
@@ -164,7 +167,12 @@ public class App {
                 propiedad1.agregarObservadores(propietario);
                 propiedad1.setEstaArrendada(false);
                 System.out.println(propietario.toString());
+
+                System.out.println("el sueldo final del agente es de " + contador.calcularSueldoFinal(agente, 02,2024,listaContrato));
+                System.out.println(agente.getSueldoMinimo());
                 
+
+
         }
 
 }

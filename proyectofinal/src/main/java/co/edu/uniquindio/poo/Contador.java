@@ -1,9 +1,12 @@
 package co.edu.uniquindio.poo;
-import java.time.Period; 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList; 
 
 public class Contador extends Persona {
     private float sueldoContador;
     private RegistroContable registroContable;
+    ArrayList<ContratoArrendamientoReal> listaContrato = new ArrayList<ContratoArrendamientoReal>();
 
     public Contador(String nombrePersona, String apellidopersona, String telefonoPersona, int edad, String idPersona,
             float sueldoContador, RegistroContable registroContable) {
@@ -13,10 +16,15 @@ public class Contador extends Persona {
     }
 
     // metodo para que el contador calcule el sueldo final del agente inmobiliario
-    public float calcularSueldoFinal(AgenteInmobiliario agenteInmobiliario){
+    public float calcularSueldoFinal(AgenteInmobiliario agenteInmobiliario, int mes, int año, ArrayList<ContratoArrendamientoReal> listaContrato){
         float sueldoFinal = agenteInmobiliario.getSueldoMinimo();
-        for (Propiedad propiedad: agenteInmobiliario.getPropiedadesArrendadas()){
-            sueldoFinal+= propiedad.getComision();
+        for (ContratoArrendamientoReal contrato : listaContrato) {
+            if (contrato.getAgenteInmobiliario().equals(agenteInmobiliario)) {  // Verifica que el contrato es del agente especificado
+                LocalDate fechaInicio = contrato.getFechaInicio();
+                if (fechaInicio.getMonthValue() == mes && fechaInicio.getYear() == año) {
+                    sueldoFinal += contrato.getPropiedad().getComision();  // Suma la comisión de la propiedad del contrato
+                }
+            }
         }
         return sueldoFinal;
     }
