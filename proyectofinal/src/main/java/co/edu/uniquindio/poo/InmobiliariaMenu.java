@@ -6,6 +6,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.sql.rowset.spi.SyncResolver;
+
 import co.edu.uniquindio.poo.Builder.ContadorBuilder;
 import co.edu.uniquindio.poo.Builder.AgenteBuilder;
 import co.edu.uniquindio.poo.Builder.ClienteBuilder;
@@ -18,6 +20,7 @@ import co.edu.uniquindio.poo.Factory.IPropiedad;
 import co.edu.uniquindio.poo.Factory.PropiedadFactory;
 
 public class InmobiliariaMenu {
+
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_RESET = "\u001B[0m";
 
@@ -28,7 +31,9 @@ public class InmobiliariaMenu {
         ArrayList<Float> listaingresos = new ArrayList<>();
         ArrayList<Float> listaegresos = new ArrayList<>();
         ArrayList<Cliente> listaClientes = new ArrayList<>();
+        ArrayList<Factura> listaFacturas = new ArrayList<>();
         AgenteInmobiliario agente = new AgenteBuilder()
+
                 .setNombreAgente("Juan")
                 .setApellidoAgente("Perez")
                 .setTelefonoAgente("311245844")
@@ -61,24 +66,24 @@ public class InmobiliariaMenu {
             System.out.println("2. Eliminar Propiedad");
             System.out.println("3. Arrendar Propiedad");
             System.out.println("4. Obtener contrato por cliente");
-            System.out.println("5. Liberar propiedad");
-            System.out.println("6. Obtener finanzas de la inmobiliaria");
-            System.out.println("7. Salir");
+            System.out.println("5. Generar factura");
+            System.out.println("6. Liberar propiedad");
+            System.out.println("7. Obtener finanzas de la inmobiliaria");
+            System.out.println("8. Salir");
             System.out.print("Seleccione una opción: ");
 
             // Verificar que la entrada sea un número
-            if (!scanner.hasNextInt()) {
-                System.out.println("Opción no válida. Por favor, ingrese un número entre 1 y 7.");
-                scanner.next(); // Consumir la entrada no válida
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty() || !input.matches("\\d+")) {
+                System.out.println("Opción no válida. Por favor, ingrese un número entre 1 y 8.");
                 continue;
             }
 
-            opcionPrincipal = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            opcionPrincipal = Integer.parseInt(input);
 
-            // Verificar si el número está en el rango de 1 a 7
-            if (opcionPrincipal < 1 || opcionPrincipal > 7) {
-                System.out.println("Opción no válida. Por favor, ingrese un número entre 1 y 7.");
+            // Verificar si el número está en el rango de 1 a 8
+            if (opcionPrincipal < 1 || opcionPrincipal > 8) {
+                System.out.println("Opción no válida. Por favor, ingrese un número entre 1 y 8.");
                 continue;
             }
 
@@ -94,7 +99,7 @@ public class InmobiliariaMenu {
                     System.out.println("Tipo de propiedad (casa/apartamento/local): ");
                     String tipoPropiedad;
                     while (true) {
-                        tipoPropiedad = scanner.nextLine().toLowerCase();
+                        tipoPropiedad = scanner.nextLine().trim().toLowerCase();
                         if (tipoPropiedad.equals("casa") || tipoPropiedad.equals("apartamento")
                                 || tipoPropiedad.equals("local")) {
                             break;
@@ -105,21 +110,47 @@ public class InmobiliariaMenu {
                     }
 
                     System.out.println("Ingrese la localización de la propiedad: ");
-                    String localizacion = scanner.nextLine();
+                    String localizacion;
+                    while (true) {
+                        localizacion = scanner.nextLine().trim();
+                        if (!localizacion.isEmpty()) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "La localización no puede estar vacía. Por favor, ingrese una localización válida.");
+                        }
+                    }
 
                     System.out.println("Ingrese la descripción de la propiedad: ");
-                    String descripcion = scanner.nextLine();
+                    String descripcion;
+                    while (true) {
+                        descripcion = scanner.nextLine().trim();
+                        if (!descripcion.isEmpty()) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "La descripción no puede estar vacía. Por favor, ingrese una descripción válida.");
+                        }
+                    }
 
                     System.out.println("Ingrese el ID de la propiedad: ");
-                    String idPropiedad = scanner.nextLine();
+                    String idPropiedad;
+                    while (true) {
+                        idPropiedad = scanner.nextLine().trim();
+                        if (!idPropiedad.isEmpty() && !idPropiedad.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID de la propiedad no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
 
                     System.out.println("Ingrese el valor de arriendo de la propiedad: ");
                     float valorArriendo = 0;
                     while (true) {
-
-                        if (scanner.hasNextFloat()) {
-                            valorArriendo = scanner.nextFloat();
-                            scanner.nextLine(); // Consumir nueva línea
+                        String inputArriendo = scanner.nextLine().trim();
+                        if (!inputArriendo.isEmpty() && inputArriendo.matches("\\d+(\\.\\d+)?")) {
+                            valorArriendo = Float.parseFloat(inputArriendo);
                             if (valorArriendo >= 0) {
                                 break;
                             } else {
@@ -128,15 +159,14 @@ public class InmobiliariaMenu {
                             }
                         } else {
                             System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                            scanner.next(); // Consumir la entrada no válida
                         }
                     }
                     System.out.println("Ingrese el valor del depósito de la propiedad: ");
                     float valorDeposito = 0;
                     while (true) {
-                        if (scanner.hasNextFloat()) {
-                            valorDeposito = scanner.nextFloat();
-                            scanner.nextLine(); // Consumir nueva línea
+                        String inputDeposito = scanner.nextLine().trim();
+                        if (!inputDeposito.isEmpty() && inputDeposito.matches("\\d+(\\.\\d+)?")) {
+                            valorDeposito = Float.parseFloat(inputDeposito);
                             if (valorDeposito >= 0) {
                                 break;
                             } else {
@@ -145,16 +175,15 @@ public class InmobiliariaMenu {
                             }
                         } else {
                             System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                            scanner.next(); // Consumir la entrada no válida
                         }
                     }
 
                     System.out.println("Ingrese la comisión de la propiedad: ");
                     float comision = 0;
                     while (true) {
-                        if (scanner.hasNextFloat()) {
-                            comision = scanner.nextFloat();
-                            scanner.nextLine(); // Consumir nueva línea
+                        String inputComision = scanner.nextLine().trim();
+                        if (!inputComision.isEmpty() && inputComision.matches("\\d+(\\.\\d+)?")) {
+                            comision = Float.parseFloat(inputComision);
                             if (comision >= 0) {
                                 break;
                             } else {
@@ -163,37 +192,64 @@ public class InmobiliariaMenu {
                             }
                         } else {
                             System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                            scanner.next(); // Consumir la entrada no válida
                         }
                     }
                     System.out.println("Ingrese el nombre del propietario de la propiedad: ");
-                    String nombrePropietario = scanner.nextLine();
+                    String nombrePropietario = scanner.nextLine().trim();
+                    while (nombrePropietario.isEmpty() || !nombrePropietario.matches("[a-zA-Z ]+")) {
+                        System.out
+                                .println("Nombre no válido. Por favor, ingrese solo letras y puede contener espacios.");
+                        nombrePropietario = scanner.nextLine().trim();
+                    }
 
                     System.out.println("Ingrese el apellido del propietario de la propiedad: ");
-                    String apellidoPropietario = scanner.nextLine();
+                    String apellidoPropietario = scanner.nextLine().trim();
+                    while (apellidoPropietario.isEmpty() || !nombrePropietario.matches("[a-zA-Z ]+")) {
+                        System.out
+                                .println(
+                                        "Apellido no válido. Por favor, ingrese solo letras y puede contener espacios.");
+                        nombrePropietario = scanner.nextLine().trim();
+                    }
 
                     System.out.println("Ingrese el teléfono del propietario de la propiedad: ");
-                    String telefonoPropietario = scanner.nextLine();
+                    String telefonoPropietario;
+                    while (true) {
+                        telefonoPropietario = scanner.nextLine().trim();
+                        if (!telefonoPropietario.isEmpty() && telefonoPropietario.matches("\\d+")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El teléfono no puede estar vacío y debe contener solo números. Por favor, ingrese un teléfono válido.");
+                        }
+                    }
 
                     System.out.println("Ingrese la edad del propietario de la propiedad: ");
                     int edadPropietario = 0;
                     while (true) {
-                        if (scanner.hasNextInt()) {
-                            edadPropietario = scanner.nextInt();
-                            scanner.nextLine(); // Consumir nueva línea
-                            if (edadPropietario >= 0) {
+                        String inputEdad = scanner.nextLine().trim();
+                        if (!inputEdad.isEmpty() && inputEdad.matches("\\d+")) {
+                            edadPropietario = Integer.parseInt(inputEdad);
+                            if (edadPropietario >= 0 && edadPropietario <= 130) {
                                 break;
                             } else {
                                 System.out.println(
-                                        "La edad no puede ser negativa. Por favor, ingrese un número positivo.");
+                                        "La edad no puede ser negativa ni mayor a 130. Por favor, ingrese un número valido.");
                             }
                         } else {
                             System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
-                            scanner.next(); // Consumir la entrada no válida
                         }
                     }
                     System.out.println("Ingrese el ID del propietario de la propiedad: ");
-                    String idPropietario = scanner.nextLine();
+                    String idPropietario;
+                    while (true) {
+                        idPropietario = scanner.nextLine().trim();
+                        if (!idPropietario.isEmpty() && !idPropietario.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID del propietario no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
 
                     Propietario propietario = new PropietarioBuilder()
                             .setNombrePropietario(nombrePropietario)
@@ -212,18 +268,19 @@ public class InmobiliariaMenu {
                             int numeroPisos = 0;
                             while (true) {
                                 System.out.println("Ingrese el número de pisos: ");
-                                if (scanner.hasNextInt()) {
-                                    numeroPisos = scanner.nextInt();
-                                    scanner.nextLine(); // Consumir nueva línea
-                                    if (numeroPisos >= 0) {
+                                String inputNumeroPisos = scanner.nextLine().trim();
+                                if (!inputNumeroPisos.isEmpty() && inputNumeroPisos.matches("\\d+")
+                                        && !inputNumeroPisos.contains(" ")) {
+                                    numeroPisos = Integer.parseInt(inputNumeroPisos);
+                                    if (numeroPisos >= 0 && numeroPisos <= 4) {
                                         break;
                                     } else {
                                         System.out.println(
-                                                "El número de pisos no puede ser negativo. Por favor, ingrese un número positivo.");
+                                                "El número de pisos no puede ser negativo ni mayor a 4. Por favor, ingrese un número valido.");
                                     }
                                 } else {
-                                    System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
-                                    scanner.next(); // Consumir la entrada no válida
+                                    System.out.println(
+                                            "Entrada no válida. Por favor, ingrese un número entero sin espacios.");
                                 }
                             }
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
@@ -232,13 +289,14 @@ public class InmobiliariaMenu {
                             break;
                         }
                         case "apartamento": {
-                            
+
                             float valorAdministracion = 0;
                             while (true) {
                                 System.out.println("Ingrese el valor de administración: ");
-                                if (scanner.hasNextFloat()) {
-                                    valorAdministracion = scanner.nextFloat();
-
+                                String inputAdministracion = scanner.nextLine().trim();
+                                if (!inputAdministracion.isEmpty() && inputAdministracion.matches("\\d+(\\.\\d+)?")
+                                        && !inputAdministracion.contains(" ")) {
+                                    valorAdministracion = Float.parseFloat(inputAdministracion);
                                     if (valorAdministracion >= 0) {
                                         break;
                                     } else {
@@ -246,11 +304,9 @@ public class InmobiliariaMenu {
                                                 "El valor no puede ser negativo. Por favor, ingrese un número positivo.");
                                     }
                                 } else {
-                                    System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                                    scanner.next(); // Consumir la entrada no válida
+                                    System.out.println("Entrada no válida. Por favor, ingrese un número sin espacios.");
                                 }
                             }
-                            scanner.nextLine(); // Consumir nueva línea
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
                                     idPropiedad, valorArriendo, valorDeposito, propietario, false, comision);
                             ((Apartamento) nuevaPropiedad).setValorAdministracion(valorAdministracion);
@@ -260,10 +316,10 @@ public class InmobiliariaMenu {
                             System.out.println("Ingrese el espacio en bodega:");
                             float espacioBodega = 0;
                             while (true) {
-                                System.out.println("Ingrese el espacio en bodega: ");
-                                if (scanner.hasNextFloat()) {
-                                    espacioBodega = scanner.nextFloat();
-                                    scanner.nextLine(); // Consumir nueva línea
+                                String inputEspacioBodega = scanner.nextLine().trim();
+                                if (!inputEspacioBodega.isEmpty() && inputEspacioBodega.matches("\\d+(\\.\\d+)?")
+                                        && !inputEspacioBodega.contains(" ")) {
+                                    espacioBodega = Float.parseFloat(inputEspacioBodega);
                                     if (espacioBodega >= 0) {
                                         break;
                                     } else {
@@ -271,8 +327,7 @@ public class InmobiliariaMenu {
                                                 "El valor no puede ser negativo. Por favor, ingrese un número positivo.");
                                     }
                                 } else {
-                                    System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                                    scanner.next(); // Consumir la entrada no válida
+                                    System.out.println("Entrada no válida. Por favor, ingrese un número sin espacios.");
                                 }
                             }
                             nuevaPropiedad = factory.crearPropiedad(tipoPropiedad, localizacion, descripcion,
@@ -309,9 +364,9 @@ public class InmobiliariaMenu {
                                 System.out.println("3. Terminar");
                                 int opcionDecorador = 0;
                                 while (true) {
-                                    if (scanner.hasNextInt()) {
-                                        opcionDecorador = scanner.nextInt();
-                                        scanner.nextLine(); // Consumir nueva línea
+                                    String inputDecorador = scanner.nextLine().trim();
+                                    if (!inputDecorador.isEmpty() && inputDecorador.matches("\\d+")) {
+                                        opcionDecorador = Integer.parseInt(inputDecorador);
                                         if (opcionDecorador >= 1 && opcionDecorador <= 3) {
                                             break;
                                         } else {
@@ -320,7 +375,6 @@ public class InmobiliariaMenu {
                                         }
                                     } else {
                                         System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
-                                        scanner.next(); // Consumir la entrada no válida
                                     }
                                 }
 
@@ -341,8 +395,7 @@ public class InmobiliariaMenu {
                                 }
                             }
                         }
-                        System.out
-                                .println("Descripción de la propiedad: " + propiedadDecorada.getDescripcion());
+                        System.out.println("Descripción de la propiedad: " + propiedadDecorada.getDescripcion());
 
                         System.out.println("¿Desea agregar esta propiedad a un conjunto existente? (si/no): ");
                         String respuesta;
@@ -356,7 +409,15 @@ public class InmobiliariaMenu {
                         }
                         if (respuesta.equals("si")) {
                             System.out.println("Ingrese el nombre del conjunto: ");
-                            String nombreConjunto = scanner.nextLine();
+                            String nombreConjunto;
+                            while (true) {
+                                nombreConjunto = scanner.nextLine().trim();
+                                if (!nombreConjunto.isEmpty() && nombreConjunto.matches("[a-zA-Z ]+")) {
+                                    break;
+                                } else {
+                                    System.out.println("Nombre no válido. Por favor, ingrese solo letras.");
+                                }
+                            }
 
                             for (IPropiedad prop : listapropiedades) {
                                 if (prop instanceof ConjuntoPropiedad
@@ -407,7 +468,22 @@ public class InmobiliariaMenu {
                                     + ANSI_RESET);
                     System.out.println();
                     System.out.println("Ingrese el ID de la propiedad a eliminar: ");
-                    String idPropiedadEliminar = scanner.nextLine();
+                    String idPropiedadEliminar;
+                    while (true) {
+                        idPropiedadEliminar = scanner.nextLine().trim();
+                        if (!idPropiedadEliminar.isEmpty() && !idPropiedadEliminar.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
+
+                    while (idPropiedadEliminar.isEmpty()) {
+                        System.out.println(
+                                "El ID no puede estar vacío o contener solo espacios en blanco. Por favor, ingrese un ID válido:");
+                        idPropiedadEliminar = scanner.nextLine().trim();
+                    }
 
                     Propiedad propiedadAEliminar = null;
                     for (Propiedad propiedad : inmobiliaria.getPropiedades()) {
@@ -440,37 +516,56 @@ public class InmobiliariaMenu {
                     System.out.println();
                     System.out.println("Ingrese los datos del cliente: ");
                     System.out.println("Nombre: ");
-                    String nombreCliente = scanner.nextLine();
+                    String nombreCliente = scanner.nextLine().trim();
+                    while (nombreCliente.isEmpty() || !nombreCliente.matches("[a-zA-Z ]+")) {
+                        System.out.println("Nombre no válido. Por favor, ingrese solo letras.");
+                        nombreCliente = scanner.nextLine().trim();
+                    }
                     System.out.println("Apellido: ");
-                    String apellidoCliente = scanner.nextLine();
+                    String apellidoCliente = scanner.nextLine().trim();
+                    while (apellidoCliente.isEmpty() || !apellidoCliente.matches("[a-zA-Z ]+")) {
+                        System.out.println("Apellido no válido. Por favor, ingrese solo letras.");
+                        apellidoCliente = scanner.nextLine().trim();
+                    }
                     System.out.println("Teléfono: ");
-                    String telefonoCliente = scanner.nextLine();
+                    String telefonoCliente = scanner.nextLine().trim();
+                    while (!telefonoCliente.matches("\\d+")) {
+                        System.out.println("Teléfono no válido. Por favor, ingrese solo números sin espacios.");
+                        telefonoCliente = scanner.nextLine().trim();
+                    }
                     System.out.println("Edad: ");
                     int edadCliente = 0;
                     while (true) {
-                        if (scanner.hasNextInt()) {
-                            edadCliente = scanner.nextInt();
-                            scanner.nextLine(); // Consumir nueva línea
-                            if (edadCliente >= 0) {
+                        String inputEdad = scanner.nextLine().trim();
+                        if (!inputEdad.isEmpty() && inputEdad.matches("\\d+")) {
+                            edadCliente = Integer.parseInt(inputEdad);
+                            if (edadCliente >= 0 && edadCliente <= 130) {
                                 break;
                             } else {
                                 System.out.println(
-                                        "La edad no puede ser negativa. Por favor, ingrese un número positivo.");
+                                        "La edad no puede ser negativa ni mayor a 130. Por favor, ingrese un número válido.");
                             }
                         } else {
                             System.out.println("Entrada no válida. Por favor, ingrese un número entero.");
-                            // Consumir la entrada no válida
-                            scanner.nextLine(); // Consumir el salto de línea restante
                         }
                     }
                     System.out.println("ID: ");
-                    String idCliente = scanner.nextLine();
+                    String idCliente;
+                    while (true) {
+                        idCliente = scanner.nextLine().trim();
+                        if (!idCliente.isEmpty() && !idCliente.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
                     System.out.println("Presupuesto: ");
                     float presupuestoCliente = 0;
                     while (true) {
-                        if (scanner.hasNextFloat()) {
-                            presupuestoCliente = scanner.nextFloat();
-                            scanner.nextLine(); // Consumir nueva línea
+                        String inputPresupuesto = scanner.nextLine().trim();
+                        if (!inputPresupuesto.isEmpty() && inputPresupuesto.matches("\\d+(\\.\\d+)?")) {
+                            presupuestoCliente = Float.parseFloat(inputPresupuesto);
                             if (presupuestoCliente >= 0) {
                                 break;
                             } else {
@@ -479,9 +574,8 @@ public class InmobiliariaMenu {
                             }
                         } else {
                             System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                            scanner.next(); // Consumir la entrada no válida
                         }
-                    } // Consumir el salto de línea
+                    }
 
                     Cliente cliente = new ClienteBuilder()
                             .setNombreCliente(nombreCliente)
@@ -492,8 +586,18 @@ public class InmobiliariaMenu {
                             .setPresupuestoCliente(presupuestoCliente)
                             .builderCliente();
 
+                    listaClientes.add(cliente);
                     System.out.println("Ingrese el ID de la propiedad a arrendar: ");
-                    String idPropiedadArrendar = scanner.nextLine();
+                    String idPropiedadArrendar;
+                    while (true) {
+                        idPropiedadArrendar = scanner.nextLine().trim();
+                        if (!idPropiedadArrendar.isEmpty() && !idPropiedadArrendar.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
                     boolean propiedadEncontrada = false;
 
                     for (Propiedad propiedad : listapropiedades) {
@@ -504,35 +608,39 @@ public class InmobiliariaMenu {
 
                                 if (arrendada) {
                                     System.out.println("Propiedad arrendada exitosamente, generando contrato...");
-
+                                    LocalDate Inicio = null;
+                                    LocalDate Fin = null;
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-                                    LocalDate inicio = null;
                                     while (true) {
                                         try {
                                             System.out.print("Ingrese la fecha de inicio del contrato (YYYY-MM-DD): ");
-                                            inicio = LocalDate.parse(scanner.nextLine(), formatter);
+                                            Inicio = LocalDate.parse(scanner.nextLine(), formatter);
                                             break;
                                         } catch (DateTimeParseException e) {
                                             System.out.println(
-                                                    "Fecha no válida. Por favor, ingrese la fecha en el formato YYYY-MM-DD.");
+                                                    "Fecha no válida. Por favor, ingrese una fecha en el formato YYYY-MM-DD.");
                                         }
                                     }
 
-                                    LocalDate fin = null;
                                     while (true) {
                                         try {
                                             System.out.print("Ingrese la fecha de fin del contrato (YYYY-MM-DD): ");
-                                            fin = LocalDate.parse(scanner.nextLine(), formatter);
-                                            break;
+                                            Fin = LocalDate.parse(scanner.nextLine(), formatter);
+                                            if (Fin.isAfter(Inicio)) {
+                                                break;
+                                            } else {
+                                                System.out.println(
+                                                        "La fecha de fin debe ser posterior a la fecha de inicio.");
+                                            }
                                         } catch (DateTimeParseException e) {
                                             System.out.println(
-                                                    "Fecha no válida. Por favor, ingrese la fecha en el formato YYYY-MM-DD.");
+                                                    "Fecha no válida. Por favor, ingrese una fecha en el formato YYYY-MM-DD.");
                                         }
                                     }
 
                                     ContratoArrendamientoReal contrato = agente.generContratoArrendamiento(propiedad,
-                                            cliente, agente, inicio, fin);
+                                            cliente, agente, Inicio, Fin);
                                     contrato.obtenerInformacionContrato();
                                     listaContrato.add(contrato);
                                     System.out.println("Contrato generado exitosamente.");
@@ -548,7 +656,7 @@ public class InmobiliariaMenu {
                     }
 
                     if (!propiedadEncontrada) {
-                        System.out.println("Propiedad no encontrada. Por favor, ingrese un ID válido.");
+                        System.out.println("Propiedad con ID " + idPropiedadArrendar + " no encontrada.");
                     }
                     System.out.println();
                     System.out.println(
@@ -566,7 +674,16 @@ public class InmobiliariaMenu {
                     System.out.println();
 
                     System.out.println("Ingrese el ID del cliente: ");
-                    String idCliente = scanner.nextLine();
+                    String idCliente;
+                    while (true) {
+                        idCliente = scanner.nextLine().trim();
+                        if (!idCliente.isEmpty() && !idCliente.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
                     boolean clienteEncontrado = false;
 
                     for (ContratoArrendamientoReal contrato : listaContrato) {
@@ -575,12 +692,20 @@ public class InmobiliariaMenu {
 
                             // Solicitar ID del agente
                             System.out.println("Ingrese el ID del agente: ");
-                            String idAgente = scanner.nextLine();
-
-                            System.out.println(contrato.getAgenteInmobiliario().getIdPersona());
+                            String idAgente;
+                            while (true) {
+                                idAgente = scanner.nextLine().trim();
+                                if (!idAgente.isEmpty() && !idAgente.contains(" ")) {
+                                    break;
+                                } else {
+                                    System.out.println(
+                                            "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                                }
+                            }
 
                             // Verificar si el ID del agente coincide con el agente asignado
                             if (contrato.getAgenteInmobiliario().getIdPersona().equals(idAgente)) {
+                                // Mostrar información del contrato en formato de tabla
                                 System.out.println(contrato.obtenerInformacionContrato());
                             } else {
                                 System.out.println("El ID del agente no coincide con el agente asignado.");
@@ -598,15 +723,78 @@ public class InmobiliariaMenu {
                     break;
                 }
 
-                // caso 5
                 case 5: {
+                    System.out.println();
+                    System.out.println(ANSI_RED
+                            + "****************  SECCION DE GENERAR FACTURA  **************************" + ANSI_RESET);
+                    System.out.println();
+
+                    System.out.println("Ingrese el ID del cliente: ");
+                    String idClienteFactura;
+                    while (true) {
+                        idClienteFactura = scanner.nextLine().trim();
+                        if (!idClienteFactura.isEmpty() && !idClienteFactura.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
+                    Cliente clienteFactura = null;
+
+                    for (Cliente cliente : listaClientes) {
+                        if (cliente.getIdPersona().equals(idClienteFactura)) {
+                            clienteFactura = cliente;
+                            break;
+                        }
+                    }
+                    if (clienteFactura == null) {
+                        System.out.println("Cliente con ID " + idClienteFactura + " no encontrado.");
+                    } else {
+                        System.out.println("Ingrese el número de factura: ");
+                        long numeroFactura = Long.parseLong(scanner.nextLine());
+
+                        System.out.println("Ingrese el valor del pago: ");
+                        float valorPago = Float.parseFloat(scanner.nextLine());
+
+                        LocalDate fechaGenerado = LocalDate.now();
+                        System.out.println("Ingrese la fecha de vencimiento (YYYY-MM-DD): ");
+                        LocalDate fechaVencimiento = LocalDate.parse(scanner.nextLine());
+
+                        System.out.println("Ingrese el estado de la transacción: ");
+                        EstadoTransaccion estadoTransaccion = EstadoTransaccion
+                                .valueOf(scanner.nextLine().toUpperCase());
+
+                        Factura factura = new Factura(numeroFactura, valorPago, fechaGenerado, fechaVencimiento,
+                                estadoTransaccion, clienteFactura);
+                        listaFacturas.add(factura);
+                        System.out.println(factura.generarComprobante());
+                    }
+
+                    System.out.println();
+                    System.out.println(ANSI_RED + "******  FIN DE LA SECCION DE GENERAR FACTURA ********" + ANSI_RESET);
+                    System.out.println();
+                    break;
+                }
+
+                // caso 6
+                case 6: {
                     System.out.println();
                     System.out.println(
                             ANSI_RED + "****************  SECCION DE LIBERAR PROPIEDAD  **************************"
                                     + ANSI_RESET);
                     System.out.println();
                     System.out.println("Ingrese el ID de la propiedad a liberar: ");
-                    String idPropiedadLiberar = scanner.nextLine();
+                    String idPropiedadLiberar;
+                    while (true) {
+                        idPropiedadLiberar = scanner.nextLine().trim();
+                        if (!idPropiedadLiberar.isEmpty() && !idPropiedadLiberar.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
                     boolean propiedadEncontrada = false;
                     for (Propiedad propiedad : listapropiedades) {
                         if (propiedad.getIdPropiedad().equals(idPropiedadLiberar)) {
@@ -625,11 +813,10 @@ public class InmobiliariaMenu {
                                     + ANSI_RESET);
                     System.out.println();
                     break;
-
                 }
 
                 // caso 6
-                case 6: {
+                case 7: {
                     System.out.println();
                     System.out.println(
                             ANSI_RED + "****************  SECCION DE FINANZAS DE LA INMOBILIARIA  **************************"
@@ -674,7 +861,7 @@ public class InmobiliariaMenu {
                     }
                 }
 
-                case 7:
+                case 8:
                     System.out.println("Saliendo del programa...");
                     break;
 
@@ -682,7 +869,7 @@ public class InmobiliariaMenu {
                     System.out.println("Opción no válida. Intente de nuevo.");
             }
 
-        } while (opcionPrincipal != 7);
+        } while (opcionPrincipal != 8);
         System.out.println(ANSI_RED + "Gracias por usar el sistema de la inmobiliaria" + ANSI_RESET);
         scanner.close();
     }

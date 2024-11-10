@@ -107,7 +107,7 @@ public class App {
                 ContratoArrendamientoReal contrato = new ContratoArrendamientoReal(propiedad2, cliente, agente,
                                 LocalDate.of(2024, 01, 01), LocalDate.of(2024, 06, 01));
                 ContratoArrendamientoProxy proxy = new ContratoArrendamientoProxy(contrato,agente);
-                System.out.println(proxy.obtenerInformacionContrato());
+                //System.out.println(proxy.obtenerInformacionContrato());
 
                 ContratoArrendamientoReal contrato2 = new ContratoArrendamientoReal(propiedad1, cliente2, agente,
                                 LocalDate.of(2024, 01, 01), LocalDate.of(2024, 10, 01));
@@ -118,8 +118,8 @@ public class App {
                 agente.generContratoArrendamiento(propiedad1, cliente2, agente,
                                 LocalDate.of(2024, 01, 01), LocalDate.of(2024, 10, 01));
 
-                System.out.println(contrato.obtenerInformacionContrato());
-                System.out.println(contrato2.obtenerInformacionContrato());
+                //System.out.println(contrato.obtenerInformacionContrato());
+                //System.out.println(contrato2.obtenerInformacionContrato());
 
                 //prueba metodo agregar contarto a la lista
                 inmobiliaria.AgregarContrato(contrato);
