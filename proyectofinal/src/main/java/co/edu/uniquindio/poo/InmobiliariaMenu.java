@@ -6,7 +6,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 import co.edu.uniquindio.poo.Builder.ContadorBuilder;
 import co.edu.uniquindio.poo.Builder.AgenteBuilder;
 import co.edu.uniquindio.poo.Builder.ClienteBuilder;
@@ -136,8 +135,17 @@ public class InmobiliariaMenu {
                     String idPropiedad;
                     while (true) {
                         idPropiedad = scanner.nextLine().trim();
-                        if (!idPropiedad.isEmpty() && !idPropiedad.contains(" ")) {
+                        boolean idExiste = false;
+                        for (Propiedad propiedad : listapropiedades) {
+                            if (propiedad.getIdPropiedad().equals(idPropiedad)) {
+                                idExiste = true;
+                                break;
+                            }
+                        }
+                        if (!idPropiedad.isEmpty() && !idPropiedad.contains(" ") && !idExiste) {
                             break;
+                        } else if (idExiste) {
+                            System.out.println("El ID de la propiedad ya existe. Por favor, ingrese un ID diferente.");
                         } else {
                             System.out.println(
                                     "El ID de la propiedad no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
@@ -151,6 +159,7 @@ public class InmobiliariaMenu {
                         if (!inputArriendo.isEmpty() && inputArriendo.matches("\\d+(\\.\\d+)?")) {
                             valorArriendo = Float.parseFloat(inputArriendo);
                             if (valorArriendo >= 0) {
+                                contador.registrarIngreso(valorArriendo, true);
                                 break;
                             } else {
                                 System.out.println(
@@ -167,6 +176,7 @@ public class InmobiliariaMenu {
                         if (!inputDeposito.isEmpty() && inputDeposito.matches("\\d+(\\.\\d+)?")) {
                             valorDeposito = Float.parseFloat(inputDeposito);
                             if (valorDeposito >= 0) {
+                                contador.registrarIngreso(valorDeposito, false);
                                 break;
                             } else {
                                 System.out.println(
@@ -184,6 +194,7 @@ public class InmobiliariaMenu {
                         if (!inputComision.isEmpty() && inputComision.matches("\\d+(\\.\\d+)?")) {
                             comision = Float.parseFloat(inputComision);
                             if (comision >= 0) {
+                                // contador.registrarEgreso(comision);
                                 break;
                             } else {
                                 System.out.println(
@@ -203,11 +214,11 @@ public class InmobiliariaMenu {
 
                     System.out.println("Ingrese el apellido del propietario de la propiedad: ");
                     String apellidoPropietario = scanner.nextLine().trim();
-                    while (apellidoPropietario.isEmpty() || !nombrePropietario.matches("[a-zA-Z ]+")) {
+                    while (apellidoPropietario.isEmpty() || !apellidoPropietario.matches("[a-zA-Z ]+")) {
                         System.out
                                 .println(
                                         "Apellido no válido. Por favor, ingrese solo letras y puede contener espacios.");
-                        nombrePropietario = scanner.nextLine().trim();
+                        apellidoPropietario = scanner.nextLine().trim();
                     }
 
                     System.out.println("Ingrese el teléfono del propietario de la propiedad: ");
@@ -559,6 +570,17 @@ public class InmobiliariaMenu {
                                     "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
                         }
                     }
+                    boolean idClienteExiste = false;
+                    for (Cliente cliente : listaClientes) {
+                        if (cliente.getIdPersona().equals(idCliente)) {
+                            idClienteExiste = true;
+                            break;
+                        }
+                    }
+                    if (idClienteExiste) {
+                        System.out.println("El ID del cliente ya existe. Por favor, ingrese un ID diferente.");
+                        continue;
+                    }
                     System.out.println("Presupuesto: ");
                     float presupuestoCliente = 0;
                     while (true) {
@@ -643,6 +665,12 @@ public class InmobiliariaMenu {
                                     contrato.obtenerInformacionContrato();
                                     listaContrato.add(contrato);
                                     System.out.println("Contrato generado exitosamente.");
+                                    propiedad.setEstaArrendada(true);
+                                    System.out.println("Notificando al agente inmobiliario.");
+                                    agente.notificarEstado(propiedad);
+                                    System.out.println("Notificación al propietario: "
+                                            + propiedad.getPropietario().getNombrePersona());
+                                    propiedad.getPropietario().notificarEstado(propiedad);
                                 } else {
                                     System.out.println("La propiedad ya está arrendada.");
                                 }
@@ -732,19 +760,67 @@ public class InmobiliariaMenu {
 
                     System.out.println("Ingrese el ID del cliente: ");
                     String idClienteFactura;
-                   
+                    while (true) {
+                        idClienteFactura = scanner.nextLine().trim();
+                        if (!idClienteFactura.isEmpty() && !idClienteFactura.contains(" ")) {
+                            break;
+                        } else {
+                            System.out.println(
+                                    "El ID no puede estar vacío ni contener espacios. Por favor, ingrese un ID válido.");
+                        }
+                    }
 
+                    Cliente clienteFactura = null;
+                    for (Cliente cliente : listaClientes) {
+                        if (cliente.getIdPersona().equals(idClienteFactura)) {
+                            clienteFactura = cliente;
+                            break;
+                        }
+                    }
 
+                    if (clienteFactura != null) {
+                        ContratoArrendamientoReal contratoCliente = null;
+                        for (ContratoArrendamientoReal contrato : listaContrato) {
+                            if (contrato.getCliente().getIdPersona().equals(idClienteFactura)) {
+                                contratoCliente = contrato;
+                                break;
+                            }
+                        }
 
+                        if (contratoCliente != null) {
+                            LocalDate fechaGenerado = LocalDate.now();
+                            LocalDate fechaVencimiento = fechaGenerado.plusMonths(1);
 
+                            // Determinar el estado de la transacción
+                            EstadoTransaccion estadoTransaccion;
+                            if (fechaGenerado.isBefore(fechaVencimiento) || fechaGenerado.isEqual(fechaVencimiento)) {
+                                estadoTransaccion = EstadoTransaccion.VIGENTE;
+                            } else {
+                                estadoTransaccion = EstadoTransaccion.VENCIDO;
+                            }
 
+                            Factura factura = new Factura(
+                                    System.currentTimeMillis(), // Número de factura generado a partir del tiempo actual
+                                    (float) contratoCliente.getValorFinal(),
+                                    fechaGenerado,
+                                    fechaVencimiento,
+                                    estadoTransaccion,
+                                    clienteFactura);
 
-
-
-
+                            listaFacturas.add(factura);
+                            System.out.println("Factura generada exitosamente:");
+                            System.out.println(factura.generarComprobante());
+                        } else {
+                            System.out.println("No se encontró un contrato para el cliente con ID " + idClienteFactura);
+                        }
+                    } else {
+                        System.out.println("Cliente con ID " + idClienteFactura + " no encontrado.");
+                    }
 
                     System.out.println();
-                    System.out.println(ANSI_RED + "******  FIN DE LA SECCION DE GENERAR FACTURA ********" + ANSI_RESET);
+                    System.out.println(ANSI_RED
+                            + "******************  FIN DE LA SECCION DE GENERAR FACTURA ************************"
+                            + ANSI_RESET);
                     System.out.println();
                     break;
                 }
@@ -773,6 +849,11 @@ public class InmobiliariaMenu {
                             propiedadEncontrada = true;
                             propiedad.setEstaArrendada(false);
                             System.out.println("Propiedad liberada exitosamente.");
+                            System.out.println("Notificando al agente inmobiliario.");
+                            agente.notificarEstado(propiedad);
+                            System.out.println(
+                                    "Notificación al propietario: " + propiedad.getPropietario().getNombrePersona());
+                            propiedad.getPropietario().notificarEstado(propiedad);
                         }
 
                     }
@@ -787,50 +868,89 @@ public class InmobiliariaMenu {
                     break;
                 }
 
-                // caso 6
+                // caso 7
                 case 7: {
+
                     System.out.println();
                     System.out.println(
-                            ANSI_RED + "****************  SECCION DE FINANZAS DE LA INMOBILIARIA  **************************"
-                                    + ANSI_RESET);
+                            ANSI_RED + "******  SECCION DE FINANZAS DE LA INMOBILIARIA  **********" + ANSI_RESET);
                     System.out.println();
 
-                    float totalIngresos = 0;
+                    System.out.println("Ingrese el mes (1-12): ");
+                    int mes = 0;
+                    while (true) {
+                        String Mes = scanner.nextLine().trim();
+                        if (!Mes.isEmpty() && Mes.matches("\\d+")) {
+                            mes = Integer.parseInt(Mes);
+                            if (mes >= 1 && mes <= 12) {
+                                break;
+                            } else {
+                                System.out.println("Mes no válido. Por favor, ingrese un número entre 1 y 12.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                        }
+                    }
+
+                    System.out.println("Ingrese el año: ");
+                    int año = 0;
+                    while (true) {
+                        String Año = scanner.nextLine().trim();
+                        if (!Año.isEmpty() && Año.matches("\\d+")) {
+                            año = Integer.parseInt(Año);
+                            if (año > 0) {
+                                break;
+                            } else {
+                                System.out.println("Año no válido. Por favor, ingrese un número positivo.");
+                            }
+                        } else {
+                            System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                        }
+
+                    }
+                    // Filtrar contratos por mes y año
+                    ArrayList<ContratoArrendamientoReal> contratosFiltrados = new ArrayList<>();
                     for (ContratoArrendamientoReal contrato : listaContrato) {
-                        totalIngresos += contrato.getValorFinal();
+                        LocalDate fechaInicio = contrato.getFechaInicio();
+                        LocalDate fechaFin = contrato.getFechaFin();
+
+                        // Iterar sobre cada mes dentro del rango de fechas del contrato
+                        LocalDate fechaActual = fechaInicio.withDayOfMonth(1);
+                        while (!fechaActual.isAfter(fechaFin)) {
+                            if (fechaActual.getMonthValue() == mes && fechaActual.getYear() == año) {
+                                contratosFiltrados.add(contrato);
+                                break;
+                            }
+                            fechaActual = fechaActual.plusMonths(1);
+                        }
+                    }
+                    // Calcular ingresos totales de los contratos filtrados
+                    float totalIngresosFiltrados = 0;
+                    for (ContratoArrendamientoReal contrato : contratosFiltrados) {
+                        totalIngresosFiltrados += contrato.getValorFinal();
                     }
 
-                    // Calcular sueldos finales de los agentes
-                    float totalSueldosAgentes = 0;
-                    totalSueldosAgentes += contador.calcularSueldoFinal(agente,);
-
-                    for (IPropiedad prop : listapropiedades) {
-                        if (prop instanceof ConjuntoPropiedad) {
-                            // ConjuntoPropiedad conjunto = (ConjuntoPropiedad) prop;
-                            totalIngresos += conjunto.rentaTotalConjunto(agente);
-                        }
-                        // Calcular otros egresos
-                        float totalEgresos = totalSueldosAgentes;
-                        for (Float egreso : listaegresos) {
-                            totalEgresos += egreso;
-                        }
-
-                        // Calcular finanzas netas
-                        float finanzasNetas = totalIngresos - totalEgresos;
-
-                        // Mostrar resultados en formato tabular
-                        System.out.println("\n--- FINANZAS DE LA INMOBILIARIA ---");
-                        System.out.printf("%-20s %-20s %-20s\n", "Ingresos Totales", "Egresos Totales",
-                                "Finanzas Netas");
-                        System.out.printf("%-20.2f %-20.2f %-20.2f\n", totalIngresos, totalEgresos, finanzasNetas);
-
-                        System.out.println();
-                        System.out.println(
-                                ANSI_RED + "******************  FIN DE LA SECCION DE FINANZAS DE LA INMOBILIARIA ************************"
-                                        + ANSI_RESET);
-                        System.out.println();
-                        break;
+                    // Calcular egresos totales de los contratos filtrados
+                    float totalEgresosFiltrados = 0;
+                    for (ContratoArrendamientoReal contrato : contratosFiltrados) {
+                        totalEgresosFiltrados += contrato.getPropiedad().getComision();
                     }
+
+                    // Calcular finanzas netas de los contratos filtrados
+                    float finanzasNetasFiltradas = totalIngresosFiltrados - totalEgresosFiltrados;
+
+                    // Mostrar resultados en formato tabular
+                    System.out.println(
+                            "\n--- FINANZAS DE LA INMOBILIARIA PARA EL MES " + mes + " DEL AÑO " + año + " ---");
+                    System.out.printf("%-20s %-20s %-20s\n", "Ingresos Totales", "Egresos Totales", "Finanzas Netas");
+                    System.out.printf("%-20.2f %-20.2f %-20.2f\n", totalIngresosFiltrados, totalEgresosFiltrados,
+                            finanzasNetasFiltradas);
+
+                    System.out.println();
+                    System.out.println(ANSI_RED + "******  FIN DE LA SECCION DE FINANZAS DE LA INMOBILIARIA ********"
+                            + ANSI_RESET);
+                    System.out.println();
+                    break;
                 }
 
                 case 8:

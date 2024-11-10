@@ -82,5 +82,12 @@ public class ContratoArrendamientoReal implements IContrato {
     public void setValorFinal(double valorFinal) {
         this.valorFinal = valorFinal;
     }
+    public int getMes() {
+        return this.fechaInicio.getMonthValue();
+    }
+
+    public int getAño() {
+        return this.fechaInicio.getYear();
+    }
 
 }
